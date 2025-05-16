@@ -134,12 +134,10 @@
     "type": "object",
     "required": ["vesselId", "berthId", "start", "end"],
     "properties": {
-      "properties": {
       "vesselId": { "type": "string" },
       "berthId":  { "type": "string" },
       "start":    { "type": "string", "format": "date-time" },
       "end":      { "type": "string", "format": "date-time" }
-      }
     }
   }
 }
