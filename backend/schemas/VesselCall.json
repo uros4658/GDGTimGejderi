@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/berth/v1/VesselCall.json",
+  "title": "VesselCall",
+  "type": "object",
+  "required": ["id", "vessel", "optimizerPlan"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "UUID v4"
+    },
+
+    "vessel": {
+      "type": "object",
+      "required": ["imo", "name", "type", "loa_m", "beam_m", "draft_m", "eta"],
+      "properties": {
+        "imo": { "type": "integer", "minimum": 1000000, "maximum": 9999999 },
+        "name": { "type": "string", "maxLength": 64 },
+        "type": { "type": "string", "enum": ["CONTAINER", "RORO", "BULK", "TANKER", "OTHER"] },
+        "loa_m": { "type": "number", "minimum": 0 },
+        "beam_m": { "type": "number", "minimum": 0 },
+        "draft_m": { "type": "number", "minimum": 0 },
+        "eta": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": false
+    },
+
+    "optimizerPlan": { "$ref": "#/$defs/berthPlan" },
+
+    "aiPrediction": {
+      "type": "object",
+      "required": ["modelVersion", "willChange"],
+      "properties": {
+        "modelVersion": { "type": "string", "pattern": "^v\\d+\\.\\d+\\.\\d+$" },
+        "willChange": { "type": "boolean" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "suggestedPlan": { "$ref": "#/$defs/berthPlan" }
+      },
+      "additionalProperties": false
+    },
+
+    "humanPlan": { "$ref": "#/$defs/berthPlan" },
+
+    "actualExecution": {
+      "type": "object",
+      "required": ["berthId", "ata", "atd"],
+      "properties": {
+        "berthId": { "type": "string" },
+        "ata": { "type": "string", "format": "date-time" },
+        "atd": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": false
+    }
+  },
+
+  "additionalProperties": false,
+
+  "$defs": {
+    "berthPlan": {
+      "type": "object",
+      "required": ["berthId", "start", "end"],
+      "properties": {
+        "berthId": { "type": "string" },
+        "start": { "type": "string", "format": "date-time" },
+        "end": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": false
+    }
+  }
+}
