@@ -2,6 +2,8 @@
 
 ## api
 
+TODO: vessel to vessel array
+
 - `GET /berth` - static berth data (structure of the port)
 
 <details>
@@ -87,7 +89,7 @@
 
 </details>
 
-- `PATCH /vessel` - provide actual data to the system
+- `PATCH /vessel` - provide actual data to the system. this changes `/vessel` endpoint
 
 <details>
 <summary>vessel data json schema</summary>
@@ -112,7 +114,7 @@
 
 </details>
 
-- `GET /plan` - berth plan recommended by the ml model
+- `GET /plan/{vessel_id}` - berth plan recommended by the ml model for the vessels with id
 
 <details>
 <summary>berth plan data json schema</summary>
