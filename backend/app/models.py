@@ -3,6 +3,7 @@ from typing import List, Optional
 
 @dataclass
 class Vessel:
+    id: int
     name: str
     size: float
     type: str  # container, tanker, passenger
