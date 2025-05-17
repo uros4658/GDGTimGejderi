@@ -2,3 +2,6 @@ fastapi[all]
 sqlalchemy>=2.0.0
 psycopg2
 alembic
+pydantic
+python-dotenv
+bcrypt 
