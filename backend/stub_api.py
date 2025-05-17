@@ -29,6 +29,10 @@ class Vessel(BaseModel):
     draft_m: float
     eta: datetime
 
+class VesselCall(BaseModel):
+    id: Optional[str] = None
+    vessel: Vessel
+    optimizerPlan: BerthPlan
 class AiPrediction(BaseModel):
     modelVersion: str
     willChange: bool
@@ -102,5 +106,8 @@ def list_vessels():
 
 @app.post("/vessels", response_model=VesselCall)
 def create_vessel(call: VesselCall):
+
+    call.id = call.id or str(uuid4())
     DB.append(call)
     return call
+
