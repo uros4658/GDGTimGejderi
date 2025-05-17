@@ -1,7 +1,6 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean, ForeignKey, Sequence
 from app.db import Base
 from datetime import datetime
-from sqlalchemy import Column, Integer, String
 from app.db import Base
 
 class Weather(Base):
@@ -49,19 +48,39 @@ class VesselCall(Base):
     aba = Column(DateTime)              # Actual Berthing Assignment time
     weather_id = Column(Integer, ForeignKey("weather.id"))
 
+class Vessel(Base):
+    __tablename__ = "vessels"
+    id = Column(Integer, primary_key=True)
+    actual_id = Column(Integer, Sequence("vessel_id_seq"), nullable=False)
+    name = Column(String(64))
+    type = Column(String(16))
+    loa_m = Column(Float)
+    beam_m = Column(Float)
+    draft_m = Column(Float)
+    dwt_t = Column(Float)
+    eta = Column(DateTime, nullable=False)
+    ebt = Column(DateTime)
 
 class Berth(Base):
     __tablename__ = "berths"
     id = Column(Integer, primary_key=True)
     name = Column(String, unique=True)
-    length_m = Column(Float)
     depth_m = Column(Float)
-    max_loa = Column(Float)
-    max_beam = Column(Float)
+    max_loa = Column(Float) # length overall
+    max_beam = Column(Float) # width overall
     max_draft = Column(Float)
     max_dwt = Column(Float)
     allowed_types = Column(String)
     maintenance_id = Column(Integer, ForeignKey("maintenance_logs.id"), nullable=True)
+
+class PredictionScheduleEntry(Base):
+    __tablename__ = "vessel_schedule_entries"
+    id = Column(Integer, primary_key=True)
+    schedule_id = Column(Integer, Sequence("schedule_id_seq"), nullable=False)
+    berth_id = Column(Integer, ForeignKey("berths.id"))
+    vessel_id = Column(Integer, ForeignKey("vessels.id"))
+    start_time = Column(DateTime)
+    end_time = Column(DateTime)
 
 class PredictionLog(Base):
     __tablename__ = "prediction_logs"
