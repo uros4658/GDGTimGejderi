@@ -1,0 +1,1384 @@
+{
+  "weather": [
+    {
+      "id": 1,
+      "timestamp": "2025-05-17T09:00:00",
+      "condition": "STORM",
+      "temperature_c": 30.5,
+      "wind_speed_knots": 10.0,
+      "tide_height_m": 1.14
+    },
+    {
+      "id": 2,
+      "timestamp": "2025-05-17T10:00:00",
+      "condition": "RAIN",
+      "temperature_c": 31.2,
+      "wind_speed_knots": 13.7,
+      "tide_height_m": 1.74
+    },
+    {
+      "id": 3,
+      "timestamp": "2025-05-17T11:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 26.7,
+      "wind_speed_knots": 15.9,
+      "tide_height_m": 1.75
+    },
+    {
+      "id": 4,
+      "timestamp": "2025-05-17T12:00:00",
+      "condition": "RAIN",
+      "temperature_c": 30.5,
+      "wind_speed_knots": 13.1,
+      "tide_height_m": 1.0
+    },
+    {
+      "id": 5,
+      "timestamp": "2025-05-17T13:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 24.9,
+      "wind_speed_knots": 5.1,
+      "tide_height_m": 1.59
+    },
+    {
+      "id": 6,
+      "timestamp": "2025-05-17T14:00:00",
+      "condition": "RAIN",
+      "temperature_c": 29.2,
+      "wind_speed_knots": 6.8,
+      "tide_height_m": 0.92
+    },
+    {
+      "id": 7,
+      "timestamp": "2025-05-17T15:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 26.9,
+      "wind_speed_knots": 6.3,
+      "tide_height_m": 1.74
+    },
+    {
+      "id": 8,
+      "timestamp": "2025-05-17T16:00:00",
+      "condition": "RAIN",
+      "temperature_c": 32.8,
+      "wind_speed_knots": 17.8,
+      "tide_height_m": 0.91
+    },
+    {
+      "id": 9,
+      "timestamp": "2025-05-17T17:00:00",
+      "condition": "RAIN",
+      "temperature_c": 33.1,
+      "wind_speed_knots": 10.8,
+      "tide_height_m": 1.76
+    },
+    {
+      "id": 10,
+      "timestamp": "2025-05-17T18:00:00",
+      "condition": "STORM",
+      "temperature_c": 29.1,
+      "wind_speed_knots": 9.2,
+      "tide_height_m": 0.82
+    },
+    {
+      "id": 11,
+      "timestamp": "2025-05-17T19:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 31.7,
+      "wind_speed_knots": 12.0,
+      "tide_height_m": 0.91
+    },
+    {
+      "id": 12,
+      "timestamp": "2025-05-17T20:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 29.3,
+      "wind_speed_knots": 12.8,
+      "tide_height_m": 1.31
+    },
+    {
+      "id": 13,
+      "timestamp": "2025-05-17T21:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 31.7,
+      "wind_speed_knots": 16.4,
+      "tide_height_m": 0.91
+    },
+    {
+      "id": 14,
+      "timestamp": "2025-05-17T22:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 31.3,
+      "wind_speed_knots": 17.9,
+      "tide_height_m": 1.27
+    },
+    {
+      "id": 15,
+      "timestamp": "2025-05-17T23:00:00",
+      "condition": "STORM",
+      "temperature_c": 26.4,
+      "wind_speed_knots": 16.0,
+      "tide_height_m": 1.57
+    },
+    {
+      "id": 16,
+      "timestamp": "2025-05-18T00:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 30.5,
+      "wind_speed_knots": 11.0,
+      "tide_height_m": 1.61
+    },
+    {
+      "id": 17,
+      "timestamp": "2025-05-18T01:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 28.5,
+      "wind_speed_knots": 7.8,
+      "tide_height_m": 1.28
+    },
+    {
+      "id": 18,
+      "timestamp": "2025-05-18T02:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 31.0,
+      "wind_speed_knots": 4.4,
+      "tide_height_m": 1.45
+    },
+    {
+      "id": 19,
+      "timestamp": "2025-05-18T03:00:00",
+      "condition": "RAIN",
+      "temperature_c": 28.7,
+      "wind_speed_knots": 13.3,
+      "tide_height_m": 1.06
+    },
+    {
+      "id": 20,
+      "timestamp": "2025-05-18T04:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 24.3,
+      "wind_speed_knots": 3.4,
+      "tide_height_m": 1.45
+    },
+    {
+      "id": 21,
+      "timestamp": "2025-05-18T05:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 34.2,
+      "wind_speed_knots": 11.4,
+      "tide_height_m": 1.38
+    },
+    {
+      "id": 22,
+      "timestamp": "2025-05-18T06:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 31.8,
+      "wind_speed_knots": 8.2,
+      "tide_height_m": 1.5
+    },
+    {
+      "id": 23,
+      "timestamp": "2025-05-18T07:00:00",
+      "condition": "RAIN",
+      "temperature_c": 34.9,
+      "wind_speed_knots": 2.0,
+      "tide_height_m": 0.86
+    },
+    {
+      "id": 24,
+      "timestamp": "2025-05-18T08:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 33.2,
+      "wind_speed_knots": 15.5,
+      "tide_height_m": 0.84
+    },
+    {
+      "id": 25,
+      "timestamp": "2025-05-18T09:00:00",
+      "condition": "RAIN",
+      "temperature_c": 26.9,
+      "wind_speed_knots": 13.4,
+      "tide_height_m": 1.72
+    },
+    {
+      "id": 26,
+      "timestamp": "2025-05-18T10:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 32.3,
+      "wind_speed_knots": 12.6,
+      "tide_height_m": 1.56
+    },
+    {
+      "id": 27,
+      "timestamp": "2025-05-18T11:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 29.2,
+      "wind_speed_knots": 11.9,
+      "tide_height_m": 1.49
+    },
+    {
+      "id": 28,
+      "timestamp": "2025-05-18T12:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 24.2,
+      "wind_speed_knots": 4.5,
+      "tide_height_m": 1.61
+    },
+    {
+      "id": 29,
+      "timestamp": "2025-05-18T13:00:00",
+      "condition": "STORM",
+      "temperature_c": 26.5,
+      "wind_speed_knots": 10.8,
+      "tide_height_m": 0.94
+    },
+    {
+      "id": 30,
+      "timestamp": "2025-05-18T14:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 32.8,
+      "wind_speed_knots": 3.6,
+      "tide_height_m": 1.27
+    },
+    {
+      "id": 31,
+      "timestamp": "2025-05-18T15:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 32.7,
+      "wind_speed_knots": 15.3,
+      "tide_height_m": 1.11
+    },
+    {
+      "id": 32,
+      "timestamp": "2025-05-18T16:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 26.3,
+      "wind_speed_knots": 13.8,
+      "tide_height_m": 1.31
+    },
+    {
+      "id": 33,
+      "timestamp": "2025-05-18T17:00:00",
+      "condition": "RAIN",
+      "temperature_c": 33.0,
+      "wind_speed_knots": 7.9,
+      "tide_height_m": 0.83
+    },
+    {
+      "id": 34,
+      "timestamp": "2025-05-18T18:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 30.4,
+      "wind_speed_knots": 17.9,
+      "tide_height_m": 1.33
+    },
+    {
+      "id": 35,
+      "timestamp": "2025-05-18T19:00:00",
+      "condition": "RAIN",
+      "temperature_c": 27.9,
+      "wind_speed_knots": 7.2,
+      "tide_height_m": 1.11
+    },
+    {
+      "id": 36,
+      "timestamp": "2025-05-18T20:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 32.1,
+      "wind_speed_knots": 6.4,
+      "tide_height_m": 1.39
+    },
+    {
+      "id": 37,
+      "timestamp": "2025-05-18T21:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 27.5,
+      "wind_speed_knots": 8.7,
+      "tide_height_m": 1.03
+    },
+    {
+      "id": 38,
+      "timestamp": "2025-05-18T22:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 27.9,
+      "wind_speed_knots": 16.6,
+      "tide_height_m": 1.13
+    },
+    {
+      "id": 39,
+      "timestamp": "2025-05-18T23:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 27.2,
+      "wind_speed_knots": 8.0,
+      "tide_height_m": 1.63
+    },
+    {
+      "id": 40,
+      "timestamp": "2025-05-19T00:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 26.4,
+      "wind_speed_knots": 2.8,
+      "tide_height_m": 1.58
+    },
+    {
+      "id": 41,
+      "timestamp": "2025-05-19T01:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 30.5,
+      "wind_speed_knots": 4.0,
+      "tide_height_m": 0.81
+    },
+    {
+      "id": 42,
+      "timestamp": "2025-05-19T02:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 34.0,
+      "wind_speed_knots": 16.5,
+      "tide_height_m": 1.64
+    },
+    {
+      "id": 43,
+      "timestamp": "2025-05-19T03:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 29.8,
+      "wind_speed_knots": 11.9,
+      "tide_height_m": 1.41
+    },
+    {
+      "id": 44,
+      "timestamp": "2025-05-19T04:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 28.1,
+      "wind_speed_knots": 10.3,
+      "tide_height_m": 0.95
+    },
+    {
+      "id": 45,
+      "timestamp": "2025-05-19T05:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 24.9,
+      "wind_speed_knots": 2.1,
+      "tide_height_m": 1.48
+    },
+    {
+      "id": 46,
+      "timestamp": "2025-05-19T06:00:00",
+      "condition": "STORM",
+      "temperature_c": 34.2,
+      "wind_speed_knots": 9.8,
+      "tide_height_m": 1.28
+    },
+    {
+      "id": 47,
+      "timestamp": "2025-05-19T07:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 25.3,
+      "wind_speed_knots": 7.6,
+      "tide_height_m": 1.16
+    },
+    {
+      "id": 48,
+      "timestamp": "2025-05-19T08:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 30.0,
+      "wind_speed_knots": 14.0,
+      "tide_height_m": 1.44
+    },
+    {
+      "id": 49,
+      "timestamp": "2025-05-19T09:00:00",
+      "condition": "RAIN",
+      "temperature_c": 26.0,
+      "wind_speed_knots": 4.1,
+      "tide_height_m": 0.93
+    },
+    {
+      "id": 50,
+      "timestamp": "2025-05-19T10:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 27.7,
+      "wind_speed_knots": 5.8,
+      "tide_height_m": 1.18
+    },
+    {
+      "id": 51,
+      "timestamp": "2025-05-19T11:00:00",
+      "condition": "RAIN",
+      "temperature_c": 31.7,
+      "wind_speed_knots": 5.2,
+      "tide_height_m": 1.33
+    },
+    {
+      "id": 52,
+      "timestamp": "2025-05-19T12:00:00",
+      "condition": "RAIN",
+      "temperature_c": 29.7,
+      "wind_speed_knots": 13.0,
+      "tide_height_m": 1.63
+    },
+    {
+      "id": 53,
+      "timestamp": "2025-05-19T13:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 28.8,
+      "wind_speed_knots": 8.8,
+      "tide_height_m": 0.92
+    },
+    {
+      "id": 54,
+      "timestamp": "2025-05-19T14:00:00",
+      "condition": "RAIN",
+      "temperature_c": 28.4,
+      "wind_speed_knots": 3.0,
+      "tide_height_m": 0.83
+    },
+    {
+      "id": 55,
+      "timestamp": "2025-05-19T15:00:00",
+      "condition": "RAIN",
+      "temperature_c": 26.2,
+      "wind_speed_knots": 13.7,
+      "tide_height_m": 1.77
+    },
+    {
+      "id": 56,
+      "timestamp": "2025-05-19T16:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 33.8,
+      "wind_speed_knots": 4.9,
+      "tide_height_m": 1.07
+    },
+    {
+      "id": 57,
+      "timestamp": "2025-05-19T17:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 28.9,
+      "wind_speed_knots": 5.5,
+      "tide_height_m": 1.4
+    },
+    {
+      "id": 58,
+      "timestamp": "2025-05-19T18:00:00",
+      "condition": "RAIN",
+      "temperature_c": 34.6,
+      "wind_speed_knots": 13.4,
+      "tide_height_m": 1.55
+    },
+    {
+      "id": 59,
+      "timestamp": "2025-05-19T19:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 25.0,
+      "wind_speed_knots": 10.7,
+      "tide_height_m": 1.76
+    },
+    {
+      "id": 60,
+      "timestamp": "2025-05-19T20:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 29.0,
+      "wind_speed_knots": 7.6,
+      "tide_height_m": 1.01
+    },
+    {
+      "id": 61,
+      "timestamp": "2025-05-19T21:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 27.9,
+      "wind_speed_knots": 10.0,
+      "tide_height_m": 0.93
+    },
+    {
+      "id": 62,
+      "timestamp": "2025-05-19T22:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 26.2,
+      "wind_speed_knots": 17.8,
+      "tide_height_m": 1.11
+    },
+    {
+      "id": 63,
+      "timestamp": "2025-05-19T23:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 29.7,
+      "wind_speed_knots": 2.7,
+      "tide_height_m": 1.6
+    },
+    {
+      "id": 64,
+      "timestamp": "2025-05-20T00:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 32.2,
+      "wind_speed_knots": 14.7,
+      "tide_height_m": 1.77
+    },
+    {
+      "id": 65,
+      "timestamp": "2025-05-20T01:00:00",
+      "condition": "RAIN",
+      "temperature_c": 34.1,
+      "wind_speed_knots": 4.4,
+      "tide_height_m": 0.94
+    },
+    {
+      "id": 66,
+      "timestamp": "2025-05-20T02:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 26.7,
+      "wind_speed_knots": 2.6,
+      "tide_height_m": 0.93
+    },
+    {
+      "id": 67,
+      "timestamp": "2025-05-20T03:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 28.2,
+      "wind_speed_knots": 12.8,
+      "tide_height_m": 1.65
+    },
+    {
+      "id": 68,
+      "timestamp": "2025-05-20T04:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 33.1,
+      "wind_speed_knots": 16.7,
+      "tide_height_m": 0.85
+    },
+    {
+      "id": 69,
+      "timestamp": "2025-05-20T05:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 26.8,
+      "wind_speed_knots": 6.7,
+      "tide_height_m": 1.22
+    },
+    {
+      "id": 70,
+      "timestamp": "2025-05-20T06:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 25.7,
+      "wind_speed_knots": 17.4,
+      "tide_height_m": 1.19
+    },
+    {
+      "id": 71,
+      "timestamp": "2025-05-20T07:00:00",
+      "condition": "RAIN",
+      "temperature_c": 29.8,
+      "wind_speed_knots": 8.9,
+      "tide_height_m": 1.0
+    },
+    {
+      "id": 72,
+      "timestamp": "2025-05-20T08:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 27.2,
+      "wind_speed_knots": 14.2,
+      "tide_height_m": 1.23
+    },
+    {
+      "id": 73,
+      "timestamp": "2025-05-20T09:00:00",
+      "condition": "RAIN",
+      "temperature_c": 27.6,
+      "wind_speed_knots": 8.6,
+      "tide_height_m": 1.19
+    },
+    {
+      "id": 74,
+      "timestamp": "2025-05-20T10:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 24.4,
+      "wind_speed_knots": 5.3,
+      "tide_height_m": 1.17
+    },
+    {
+      "id": 75,
+      "timestamp": "2025-05-20T11:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 27.7,
+      "wind_speed_knots": 11.9,
+      "tide_height_m": 1.67
+    },
+    {
+      "id": 76,
+      "timestamp": "2025-05-20T12:00:00",
+      "condition": "STORM",
+      "temperature_c": 29.0,
+      "wind_speed_knots": 8.7,
+      "tide_height_m": 1.57
+    },
+    {
+      "id": 77,
+      "timestamp": "2025-05-20T13:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 30.1,
+      "wind_speed_knots": 16.4,
+      "tide_height_m": 0.9
+    },
+    {
+      "id": 78,
+      "timestamp": "2025-05-20T14:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 25.5,
+      "wind_speed_knots": 14.7,
+      "tide_height_m": 1.02
+    },
+    {
+      "id": 79,
+      "timestamp": "2025-05-20T15:00:00",
+      "condition": "RAIN",
+      "temperature_c": 30.9,
+      "wind_speed_knots": 17.7,
+      "tide_height_m": 1.45
+    },
+    {
+      "id": 80,
+      "timestamp": "2025-05-20T16:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 33.5,
+      "wind_speed_knots": 17.8,
+      "tide_height_m": 1.48
+    },
+    {
+      "id": 81,
+      "timestamp": "2025-05-20T17:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 34.2,
+      "wind_speed_knots": 6.0,
+      "tide_height_m": 1.05
+    },
+    {
+      "id": 82,
+      "timestamp": "2025-05-20T18:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 29.3,
+      "wind_speed_knots": 8.8,
+      "tide_height_m": 1.3
+    },
+    {
+      "id": 83,
+      "timestamp": "2025-05-20T19:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 29.7,
+      "wind_speed_knots": 4.7,
+      "tide_height_m": 1.46
+    },
+    {
+      "id": 84,
+      "timestamp": "2025-05-20T20:00:00",
+      "condition": "RAIN",
+      "temperature_c": 27.0,
+      "wind_speed_knots": 13.8,
+      "tide_height_m": 0.97
+    },
+    {
+      "id": 85,
+      "timestamp": "2025-05-20T21:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 30.3,
+      "wind_speed_knots": 7.8,
+      "tide_height_m": 0.89
+    },
+    {
+      "id": 86,
+      "timestamp": "2025-05-20T22:00:00",
+      "condition": "STORM",
+      "temperature_c": 24.0,
+      "wind_speed_knots": 11.5,
+      "tide_height_m": 1.75
+    },
+    {
+      "id": 87,
+      "timestamp": "2025-05-20T23:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 27.1,
+      "wind_speed_knots": 7.6,
+      "tide_height_m": 1.77
+    },
+    {
+      "id": 88,
+      "timestamp": "2025-05-21T00:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 29.4,
+      "wind_speed_knots": 14.4,
+      "tide_height_m": 1.68
+    },
+    {
+      "id": 89,
+      "timestamp": "2025-05-21T01:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 33.4,
+      "wind_speed_knots": 10.9,
+      "tide_height_m": 1.54
+    },
+    {
+      "id": 90,
+      "timestamp": "2025-05-21T02:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 31.4,
+      "wind_speed_knots": 7.2,
+      "tide_height_m": 1.12
+    },
+    {
+      "id": 91,
+      "timestamp": "2025-05-21T03:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 34.8,
+      "wind_speed_knots": 6.5,
+      "tide_height_m": 0.97
+    },
+    {
+      "id": 92,
+      "timestamp": "2025-05-21T04:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 24.1,
+      "wind_speed_knots": 2.4,
+      "tide_height_m": 0.95
+    },
+    {
+      "id": 93,
+      "timestamp": "2025-05-21T05:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 34.3,
+      "wind_speed_knots": 16.7,
+      "tide_height_m": 1.28
+    },
+    {
+      "id": 94,
+      "timestamp": "2025-05-21T06:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 28.1,
+      "wind_speed_knots": 5.2,
+      "tide_height_m": 1.37
+    },
+    {
+      "id": 95,
+      "timestamp": "2025-05-21T07:00:00",
+      "condition": "RAIN",
+      "temperature_c": 29.0,
+      "wind_speed_knots": 10.3,
+      "tide_height_m": 0.88
+    },
+    {
+      "id": 96,
+      "timestamp": "2025-05-21T08:00:00",
+      "condition": "CLEAR",
+      "temperature_c": 25.7,
+      "wind_speed_knots": 11.8,
+      "tide_height_m": 1.07
+    }
+  ],
+  "berths": [
+    {
+      "id": 1,
+      "name": "A1",
+      "depth_m": 15,
+      "max_loa": 350,
+      "max_beam": 50,
+      "max_draft": 15,
+      "max_dwt": 120000,
+      "allowed_types": "CONTAINER,BULK",
+      "maintenance_id": 2
+    },
+    {
+      "id": 2,
+      "name": "B2",
+      "depth_m": 13,
+      "max_loa": 250,
+      "max_beam": 38,
+      "max_draft": 13,
+      "max_dwt": 80000,
+      "allowed_types": "BULK,RORO",
+      "maintenance_id": 5
+    },
+    {
+      "id": 3,
+      "name": "C3",
+      "depth_m": 11,
+      "max_loa": 220,
+      "max_beam": 35,
+      "max_draft": 11,
+      "max_dwt": 60000,
+      "allowed_types": "RORO,TANKER",
+      "maintenance_id": 8
+    },
+    {
+      "id": 4,
+      "name": "D4",
+      "depth_m": 16,
+      "max_loa": 400,
+      "max_beam": 60,
+      "max_draft": 16,
+      "max_dwt": 150000,
+      "allowed_types": "CONTAINER,TANKER",
+      "maintenance_id": 10
+    }
+  ],
+  "maintenance_logs": [
+    {
+      "id": 1,
+      "berth_name": "A1",
+      "performed_at": "2025-03-24T21:13:33.153161",
+      "notes": "Surface cleaning"
+    },
+    {
+      "id": 2,
+      "berth_name": "A1",
+      "performed_at": "2025-03-20T21:13:33.153161",
+      "notes": "Crane repair"
+    },
+    {
+      "id": 3,
+      "berth_name": "B2",
+      "performed_at": "2025-03-21T21:13:33.153161",
+      "notes": "Crane repair"
+    },
+    {
+      "id": 4,
+      "berth_name": "B2",
+      "performed_at": "2025-04-22T21:13:33.153161",
+      "notes": "Routine"
+    },
+    {
+      "id": 5,
+      "berth_name": "B2",
+      "performed_at": "2025-04-27T21:13:33.153161",
+      "notes": "Crane repair"
+    },
+    {
+      "id": 6,
+      "berth_name": "C3",
+      "performed_at": "2025-03-26T21:13:33.153161",
+      "notes": "Routine"
+    },
+    {
+      "id": 7,
+      "berth_name": "C3",
+      "performed_at": "2025-04-12T21:13:33.153161",
+      "notes": "Routine"
+    },
+    {
+      "id": 8,
+      "berth_name": "C3",
+      "performed_at": "2025-04-03T21:13:33.153161",
+      "notes": "Routine"
+    },
+    {
+      "id": 9,
+      "berth_name": "D4",
+      "performed_at": "2025-05-12T21:13:33.153161",
+      "notes": "Surface cleaning"
+    },
+    {
+      "id": 10,
+      "berth_name": "D4",
+      "performed_at": "2025-04-21T21:13:33.153161",
+      "notes": "Crane repair"
+    }
+  ],
+  "vessels": [
+    {
+      "id": 1,
+      "actual_id": 1000,
+      "name": "Vessel-0",
+      "type": "RORO",
+      "loa_m": 226.4,
+      "beam_m": 25.9,
+      "draft_m": 9.0,
+      "dwt_t": 102499.7,
+      "eta": "2025-05-19T14:13:33.163440",
+      "ebt": "2025-05-19T15:13:33.163440"
+    },
+    {
+      "id": 2,
+      "actual_id": 1001,
+      "name": "Vessel-1",
+      "type": "RORO",
+      "loa_m": 196.1,
+      "beam_m": 30.2,
+      "draft_m": 13.5,
+      "dwt_t": 118080.7,
+      "eta": "2025-05-18T04:13:33.163440",
+      "ebt": "2025-05-18T05:13:33.163440"
+    },
+    {
+      "id": 3,
+      "actual_id": 1002,
+      "name": "Vessel-2",
+      "type": "CONTAINER",
+      "loa_m": 285.8,
+      "beam_m": 36.1,
+      "draft_m": 12.5,
+      "dwt_t": 108242.4,
+      "eta": "2025-05-18T00:13:33.163440",
+      "ebt": "2025-05-18T01:13:33.163440"
+    },
+    {
+      "id": 4,
+      "actual_id": 1003,
+      "name": "Vessel-3",
+      "type": "RORO",
+      "loa_m": 269.6,
+      "beam_m": 26.7,
+      "draft_m": 9.9,
+      "dwt_t": 54926.9,
+      "eta": "2025-05-18T20:13:33.163440",
+      "ebt": "2025-05-18T21:13:33.163440"
+    },
+    {
+      "id": 5,
+      "actual_id": 1004,
+      "name": "Vessel-4",
+      "type": "CONTAINER",
+      "loa_m": 245.9,
+      "beam_m": 27.8,
+      "draft_m": 11.3,
+      "dwt_t": 86088.7,
+      "eta": "2025-05-18T23:13:33.163440",
+      "ebt": "2025-05-19T00:13:33.163440"
+    },
+    {
+      "id": 6,
+      "actual_id": 1005,
+      "name": "Vessel-5",
+      "type": "TANKER",
+      "loa_m": 281.2,
+      "beam_m": 20.9,
+      "draft_m": 8.8,
+      "dwt_t": 95527.4,
+      "eta": "2025-05-18T22:13:33.163440",
+      "ebt": "2025-05-18T23:13:33.163440"
+    },
+    {
+      "id": 7,
+      "actual_id": 1006,
+      "name": "Vessel-6",
+      "type": "BULK",
+      "loa_m": 275.6,
+      "beam_m": 32.9,
+      "draft_m": 10.4,
+      "dwt_t": 30133.6,
+      "eta": "2025-05-18T01:13:33.163440",
+      "ebt": "2025-05-18T02:13:33.163440"
+    },
+    {
+      "id": 8,
+      "actual_id": 1007,
+      "name": "Vessel-7",
+      "type": "BULK",
+      "loa_m": 243.9,
+      "beam_m": 27.4,
+      "draft_m": 13.9,
+      "dwt_t": 104672.2,
+      "eta": "2025-05-18T07:13:33.163440",
+      "ebt": "2025-05-18T08:13:33.163440"
+    },
+    {
+      "id": 9,
+      "actual_id": 1008,
+      "name": "Vessel-8",
+      "type": "RORO",
+      "loa_m": 197.1,
+      "beam_m": 27.6,
+      "draft_m": 13.3,
+      "dwt_t": 90540.6,
+      "eta": "2025-05-17T23:13:33.163440",
+      "ebt": "2025-05-18T00:13:33.163440"
+    },
+    {
+      "id": 10,
+      "actual_id": 1009,
+      "name": "Vessel-9",
+      "type": "BULK",
+      "loa_m": 225.6,
+      "beam_m": 28.0,
+      "draft_m": 12.8,
+      "dwt_t": 106855.4,
+      "eta": "2025-05-18T10:13:33.163440",
+      "ebt": "2025-05-18T11:13:33.163440"
+    },
+    {
+      "id": 11,
+      "actual_id": 1010,
+      "name": "Vessel-10",
+      "type": "TANKER",
+      "loa_m": 192.3,
+      "beam_m": 30.9,
+      "draft_m": 13.9,
+      "dwt_t": 60838.4,
+      "eta": "2025-05-18T05:13:33.163440",
+      "ebt": "2025-05-18T06:13:33.163440"
+    },
+    {
+      "id": 12,
+      "actual_id": 1011,
+      "name": "Vessel-11",
+      "type": "RORO",
+      "loa_m": 263.5,
+      "beam_m": 32.4,
+      "draft_m": 10.5,
+      "dwt_t": 86952.9,
+      "eta": "2025-05-18T14:13:33.163440",
+      "ebt": "2025-05-18T15:13:33.163440"
+    },
+    {
+      "id": 13,
+      "actual_id": 1012,
+      "name": "Vessel-12",
+      "type": "BULK",
+      "loa_m": 207.8,
+      "beam_m": 30.1,
+      "draft_m": 9.9,
+      "dwt_t": 109088.5,
+      "eta": "2025-05-19T13:13:33.163440",
+      "ebt": "2025-05-19T14:13:33.163440"
+    },
+    {
+      "id": 14,
+      "actual_id": 1013,
+      "name": "Vessel-13",
+      "type": "TANKER",
+      "loa_m": 299.7,
+      "beam_m": 25.8,
+      "draft_m": 10.0,
+      "dwt_t": 45566.5,
+      "eta": "2025-05-19T17:13:33.163440",
+      "ebt": "2025-05-19T18:13:33.163440"
+    },
+    {
+      "id": 15,
+      "actual_id": 1014,
+      "name": "Vessel-14",
+      "type": "RORO",
+      "loa_m": 271.1,
+      "beam_m": 36.4,
+      "draft_m": 12.4,
+      "dwt_t": 57502.7,
+      "eta": "2025-05-18T17:13:33.163440",
+      "ebt": "2025-05-18T18:13:33.163440"
+    },
+    {
+      "id": 16,
+      "actual_id": 1015,
+      "name": "Vessel-15",
+      "type": "BULK",
+      "loa_m": 247.3,
+      "beam_m": 23.9,
+      "draft_m": 9.8,
+      "dwt_t": 101816.0,
+      "eta": "2025-05-19T11:13:33.163440",
+      "ebt": "2025-05-19T12:13:33.163440"
+    },
+    {
+      "id": 17,
+      "actual_id": 1016,
+      "name": "Vessel-16",
+      "type": "CONTAINER",
+      "loa_m": 286.2,
+      "beam_m": 25.6,
+      "draft_m": 9.8,
+      "dwt_t": 61561.7,
+      "eta": "2025-05-18T13:13:33.163440",
+      "ebt": "2025-05-18T14:13:33.163440"
+    },
+    {
+      "id": 18,
+      "actual_id": 1017,
+      "name": "Vessel-17",
+      "type": "CONTAINER",
+      "loa_m": 203.1,
+      "beam_m": 27.0,
+      "draft_m": 12.9,
+      "dwt_t": 102634.0,
+      "eta": "2025-05-19T12:13:33.163440",
+      "ebt": "2025-05-19T13:13:33.163440"
+    },
+    {
+      "id": 19,
+      "actual_id": 1018,
+      "name": "Vessel-18",
+      "type": "RORO",
+      "loa_m": 284.7,
+      "beam_m": 20.4,
+      "draft_m": 12.5,
+      "dwt_t": 101145.8,
+      "eta": "2025-05-18T02:13:33.163440",
+      "ebt": "2025-05-18T03:13:33.163440"
+    },
+    {
+      "id": 20,
+      "actual_id": 1019,
+      "name": "Vessel-19",
+      "type": "RORO",
+      "loa_m": 221.0,
+      "beam_m": 37.1,
+      "draft_m": 10.3,
+      "dwt_t": 111476.0,
+      "eta": "2025-05-18T23:13:33.163440",
+      "ebt": "2025-05-19T00:13:33.163440"
+    },
+    {
+      "id": 21,
+      "actual_id": 1020,
+      "name": "Vessel-20",
+      "type": "TANKER",
+      "loa_m": 260.4,
+      "beam_m": 25.1,
+      "draft_m": 11.6,
+      "dwt_t": 57754.3,
+      "eta": "2025-05-18T00:13:33.163440",
+      "ebt": "2025-05-18T01:13:33.163440"
+    },
+    {
+      "id": 22,
+      "actual_id": 1021,
+      "name": "Vessel-21",
+      "type": "RORO",
+      "loa_m": 234.1,
+      "beam_m": 38.3,
+      "draft_m": 12.7,
+      "dwt_t": 91278.0,
+      "eta": "2025-05-18T05:13:33.163440",
+      "ebt": "2025-05-18T06:13:33.163440"
+    },
+    {
+      "id": 23,
+      "actual_id": 1022,
+      "name": "Vessel-22",
+      "type": "BULK",
+      "loa_m": 238.4,
+      "beam_m": 34.5,
+      "draft_m": 9.8,
+      "dwt_t": 88606.5,
+      "eta": "2025-05-18T03:13:33.163440",
+      "ebt": "2025-05-18T04:13:33.163440"
+    },
+    {
+      "id": 24,
+      "actual_id": 1023,
+      "name": "Vessel-23",
+      "type": "CONTAINER",
+      "loa_m": 193.8,
+      "beam_m": 37.0,
+      "draft_m": 13.9,
+      "dwt_t": 39149.5,
+      "eta": "2025-05-18T19:13:33.163440",
+      "ebt": "2025-05-18T20:13:33.163440"
+    },
+    {
+      "id": 25,
+      "actual_id": 1024,
+      "name": "Vessel-24",
+      "type": "RORO",
+      "loa_m": 299.1,
+      "beam_m": 32.3,
+      "draft_m": 11.1,
+      "dwt_t": 30461.5,
+      "eta": "2025-05-19T20:13:33.163440",
+      "ebt": "2025-05-19T21:13:33.163440"
+    }
+  ],
+  "schedule_entries": [
+    {
+      "id": 1,
+      "schedule_id": 1,
+      "berth_id": 2,
+      "vessel_id": 1,
+      "start_time": "2025-05-19T14:23:33.163440",
+      "end_time": "2025-05-19T21:23:33.163440"
+    },
+    {
+      "id": 2,
+      "schedule_id": 1,
+      "berth_id": 4,
+      "vessel_id": 2,
+      "start_time": "2025-05-18T04:25:33.163440",
+      "end_time": "2025-05-18T11:25:33.163440"
+    },
+    {
+      "id": 3,
+      "schedule_id": 1,
+      "berth_id": 2,
+      "vessel_id": 3,
+      "start_time": "2025-05-18T00:53:33.163440",
+      "end_time": "2025-05-18T12:53:33.163440"
+    },
+    {
+      "id": 4,
+      "schedule_id": 1,
+      "berth_id": 3,
+      "vessel_id": 4,
+      "start_time": "2025-05-18T20:55:33.163440",
+      "end_time": "2025-05-19T02:55:33.163440"
+    },
+    {
+      "id": 5,
+      "schedule_id": 1,
+      "berth_id": 2,
+      "vessel_id": 5,
+      "start_time": "2025-05-18T23:39:33.163440",
+      "end_time": "2025-05-19T04:39:33.163440"
+    },
+    {
+      "id": 6,
+      "schedule_id": 1,
+      "berth_id": 4,
+      "vessel_id": 6,
+      "start_time": "2025-05-18T22:32:33.163440",
+      "end_time": "2025-05-19T10:32:33.163440"
+    },
+    {
+      "id": 7,
+      "schedule_id": 1,
+      "berth_id": 1,
+      "vessel_id": 7,
+      "start_time": "2025-05-18T01:35:33.163440",
+      "end_time": "2025-05-18T10:35:33.163440"
+    },
+    {
+      "id": 8,
+      "schedule_id": 1,
+      "berth_id": 2,
+      "vessel_id": 8,
+      "start_time": "2025-05-18T07:19:33.163440",
+      "end_time": "2025-05-18T12:19:33.163440"
+    },
+    {
+      "id": 9,
+      "schedule_id": 1,
+      "berth_id": 2,
+      "vessel_id": 9,
+      "start_time": "2025-05-18T00:10:33.163440",
+      "end_time": "2025-05-18T04:10:33.163440"
+    },
+    {
+      "id": 10,
+      "schedule_id": 1,
+      "berth_id": 3,
+      "vessel_id": 10,
+      "start_time": "2025-05-18T10:55:33.163440",
+      "end_time": "2025-05-18T18:55:33.163440"
+    },
+    {
+      "id": 11,
+      "schedule_id": 1,
+      "berth_id": 1,
+      "vessel_id": 11,
+      "start_time": "2025-05-18T05:56:33.163440",
+      "end_time": "2025-05-18T16:56:33.163440"
+    },
+    {
+      "id": 12,
+      "schedule_id": 1,
+      "berth_id": 2,
+      "vessel_id": 12,
+      "start_time": "2025-05-18T14:39:33.163440",
+      "end_time": "2025-05-19T01:39:33.163440"
+    },
+    {
+      "id": 13,
+      "schedule_id": 1,
+      "berth_id": 3,
+      "vessel_id": 13,
+      "start_time": "2025-05-19T13:15:33.163440",
+      "end_time": "2025-05-20T01:15:33.163440"
+    },
+    {
+      "id": 14,
+      "schedule_id": 1,
+      "berth_id": 1,
+      "vessel_id": 14,
+      "start_time": "2025-05-19T18:12:33.163440",
+      "end_time": "2025-05-20T01:12:33.163440"
+    },
+    {
+      "id": 15,
+      "schedule_id": 1,
+      "berth_id": 1,
+      "vessel_id": 15,
+      "start_time": "2025-05-18T17:21:33.163440",
+      "end_time": "2025-05-18T22:21:33.163440"
+    },
+    {
+      "id": 16,
+      "schedule_id": 1,
+      "berth_id": 3,
+      "vessel_id": 16,
+      "start_time": "2025-05-19T12:03:33.163440",
+      "end_time": "2025-05-20T00:03:33.163440"
+    },
+    {
+      "id": 17,
+      "schedule_id": 1,
+      "berth_id": 1,
+      "vessel_id": 17,
+      "start_time": "2025-05-18T13:34:33.163440",
+      "end_time": "2025-05-18T23:34:33.163440"
+    },
+    {
+      "id": 18,
+      "schedule_id": 1,
+      "berth_id": 4,
+      "vessel_id": 18,
+      "start_time": "2025-05-19T12:29:33.163440",
+      "end_time": "2025-05-19T22:29:33.163440"
+    },
+    {
+      "id": 19,
+      "schedule_id": 1,
+      "berth_id": 2,
+      "vessel_id": 19,
+      "start_time": "2025-05-18T02:57:33.163440",
+      "end_time": "2025-05-18T07:57:33.163440"
+    },
+    {
+      "id": 20,
+      "schedule_id": 1,
+      "berth_id": 3,
+      "vessel_id": 20,
+      "start_time": "2025-05-19T00:07:33.163440",
+      "end_time": "2025-05-19T08:07:33.163440"
+    },
+    {
+      "id": 21,
+      "schedule_id": 1,
+      "berth_id": 2,
+      "vessel_id": 21,
+      "start_time": "2025-05-18T00:17:33.163440",
+      "end_time": "2025-05-18T04:17:33.163440"
+    },
+    {
+      "id": 22,
+      "schedule_id": 1,
+      "berth_id": 4,
+      "vessel_id": 22,
+      "start_time": "2025-05-18T06:03:33.163440",
+      "end_time": "2025-05-18T12:03:33.163440"
+    },
+    {
+      "id": 23,
+      "schedule_id": 1,
+      "berth_id": 2,
+      "vessel_id": 23,
+      "start_time": "2025-05-18T03:13:33.163440",
+      "end_time": "2025-05-18T10:13:33.163440"
+    },
+    {
+      "id": 24,
+      "schedule_id": 1,
+      "berth_id": 3,
+      "vessel_id": 24,
+      "start_time": "2025-05-18T20:02:33.163440",
+      "end_time": "2025-05-19T07:02:33.163440"
+    },
+    {
+      "id": 25,
+      "schedule_id": 1,
+      "berth_id": 4,
+      "vessel_id": 25,
+      "start_time": "2025-05-19T20:23:33.163440",
+      "end_time": "2025-05-20T03:23:33.163440"
+    }
+  ]
+}

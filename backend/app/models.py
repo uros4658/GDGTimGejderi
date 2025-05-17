@@ -85,7 +85,7 @@ class PredictionScheduleEntry(Base):
 class PredictionLog(Base):
     __tablename__ = "prediction_logs"
     id = Column(Integer, primary_key=True)
-    vessel_call_id = Column(Integer, ForeignKey("vessel_calls.id"))
+    vessel_call_id = Column(Integer, ForeignKey("vessels.id"))
     timestamp = Column(DateTime, default=datetime.utcnow)
     will_change = Column(Boolean)
     confidence = Column(Float)
