@@ -140,3 +140,12 @@ async def stream_vessels():
             yield data
 
     return StreamingResponse(event_generator(), media_type="text/event-stream")
+
+@app.post("/predict")
+async def predict(body: dict):
+    # very dumb rule: odd IMO → will change
+    call_id = body["id"]
+    call = next(c for c in DB if c.id == call_id)
+    will_change = call.vessel.imo % 2 == 1
+    confidence = 0.87
+    return {"willChange": will_change, "confidence": confidence}
