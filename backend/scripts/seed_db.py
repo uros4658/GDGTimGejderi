@@ -4,14 +4,7 @@ from app.db import SessionLocal
 from app.models import VesselCall, Berth, Weather, MaintenanceLog
 from sqlalchemy import func
 
-def seed_berths(session):
-    names = ["A1", "B2", "C3", "D4"]
-    for name in names:
-        session.add(Berth(
-            name=name,
-            length_m=random.uniform(150, 300),
-            depth_m=random.uniform(8, 16)
-        ))
+
 
 def seed_weather(session):
     print("⛅ Seeding weather...")
@@ -42,7 +35,29 @@ def seed_maintenance_logs(session):
                 performed_at=performed_at,
                 notes=random.choice(["Routine", "Crane repair", "Surface cleaning"])
             ))
-
+def seed_berths(session):
+    maint_ids = [m.id for m in session.query(MaintenanceLog.id).all()]
+    names = ["A1", "B2", "C3", "D4"]
+    berth_specs = [
+        {"max_loa": 350, "max_beam": 50, "max_draft": 15, "max_dwt": 120000, "allowed_types": "CONTAINER,BULK"},
+        {"max_loa": 250, "max_beam": 38, "max_draft": 13, "max_dwt": 80000, "allowed_types": "BULK,RORO"},
+        {"max_loa": 220, "max_beam": 35, "max_draft": 11, "max_dwt": 60000, "allowed_types": "RORO,TANKER"},
+        {"max_loa": 400, "max_beam": 60, "max_draft": 16, "max_dwt": 150000, "allowed_types": "CONTAINER,TANKER"},
+    ]
+    for name, spec in zip(names, berth_specs):
+        maintenance_id = random.choice(maint_ids) if maint_ids and random.random() < 0.5 else None
+        session.add(Berth(
+            name=name,
+            length_m=spec["max_loa"],
+            depth_m=spec["max_draft"],
+            max_loa=spec["max_loa"],
+            max_beam=spec["max_beam"],
+            max_draft=spec["max_draft"],
+            max_dwt=spec["max_dwt"],
+            allowed_types=spec["allowed_types"],
+            maintenance_id=maintenance_id
+        ))
+        
 def seed_vessels(session):
     print("🚢 Seeding vessels with ATA and ABA...")
     now = datetime.utcnow()
@@ -52,6 +67,7 @@ def seed_vessels(session):
         eta = now + timedelta(hours=random.randint(1, 48))
         etd = eta + timedelta(hours=random.randint(4, 12))
         berth = random.choice(berth_names)
+       
 
         # Find closest weather to ETA
         weather = session.query(Weather)\
@@ -102,8 +118,7 @@ def seed_vessels(session):
             prediction_confidence=round(random.uniform(0.5, 0.99), 2),
             weather_id=weather.id if weather else None,
             ata=ata,
-            aba=aba
-        )
+            aba=aba        )
         session.add(vc)
 
 

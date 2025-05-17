@@ -56,6 +56,12 @@ class Berth(Base):
     name = Column(String, unique=True)
     length_m = Column(Float)
     depth_m = Column(Float)
+    max_loa = Column(Float)
+    max_beam = Column(Float)
+    max_draft = Column(Float)
+    max_dwt = Column(Float)
+    allowed_types = Column(String)
+    maintenance_id = Column(Integer, ForeignKey("maintenance_logs.id"), nullable=True)
 
 class PredictionLog(Base):
     __tablename__ = "prediction_logs"
