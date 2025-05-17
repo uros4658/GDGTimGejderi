@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from uuid import uuid4
 from datetime import datetime, timedelta
+from typing import Optional
 
 app = FastAPI()
 app.add_middleware(
@@ -29,7 +30,7 @@ class Vessel(BaseModel):
     eta: datetime
 
 class VesselCall(BaseModel):
-    id: str
+    id: Optional[str] = None
     vessel: Vessel
     optimizerPlan: BerthPlan
 
@@ -67,5 +68,6 @@ def list_vessels():
 
 @app.post("/vessels", response_model=VesselCall)
 def create_vessel(call: VesselCall):
+    call.id = call.id or str(uuid4())
     DB.append(call)
     return call
