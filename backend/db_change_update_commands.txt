@@ -1,0 +1,5 @@
+# 1. Generate a new migration after changing models
+python -m alembic revision --autogenerate -m "Describe your change"
+
+# 2. Apply the migration to update the database
+python -m alembic upgrade head
