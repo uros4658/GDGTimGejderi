@@ -1,6 +1,10 @@
 from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean, ForeignKey
 from app.db import Base
 from datetime import datetime
+from sqlalchemy import Column, Integer, String
+from app.db import Base
+
+
 
 class VesselCall(Base):
     __tablename__ = "vessel_calls"
@@ -50,3 +54,9 @@ class PredictionLog(Base):
     will_change = Column(Boolean)
     confidence = Column(Float)
     model_version = Column(String)
+    
+class User(Base):
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True)
+    username = Column(String(32), unique=True, nullable=False)
+    password_hash = Column(String(128), nullable=False)
