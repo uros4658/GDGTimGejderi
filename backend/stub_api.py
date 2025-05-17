@@ -18,9 +18,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# --------------------------------------------------------------------- #
-#  Models                                                               #
-# --------------------------------------------------------------------- #
 class BerthPlan(BaseModel):
     berthId: str
     start: datetime
@@ -58,10 +55,6 @@ class VesselCall(BaseModel):
     humanPlan: Optional[BerthPlan] = None
     actualExecution: Optional[ActualExecution] = None
 
-
-# --------------------------------------------------------------------- #
-#  In-memory “DB” and seed data                                         #
-# --------------------------------------------------------------------- #
 DB: List[VesselCall] = []
 
 
@@ -101,9 +94,6 @@ def seed() -> None:
 
 seed()
 
-# --------------------------------------------------------------------- #
-#  Simple event queue for SSE                                           #
-# --------------------------------------------------------------------- #
 event_queue: "asyncio.Queue[str]" = asyncio.Queue()
 
 
@@ -111,10 +101,6 @@ async def broadcast(call: VesselCall) -> None:
     """Push a JSON line to all EventSource subscribers."""
     await event_queue.put(f"data: {call.model_dump_json()}\n\n")
 
-
-# --------------------------------------------------------------------- #
-#  REST + SSE endpoints                                                 #
-# --------------------------------------------------------------------- #
 @app.get("/vessels", response_model=list[VesselCall])
 async def list_vessels() -> list[VesselCall]:
     return DB
@@ -131,10 +117,10 @@ async def create_vessel(call: VesselCall) -> VesselCall:
 @app.get("/stream/vessels")
 async def stream_vessels():
     async def event_generator():
-        # Send existing DB once on connect (optional)
+     
         for row in DB:
             yield f"data: {row.model_dump_json()}\n\n"
-        # Then stream new rows
+     
         while True:
             data = await event_queue.get()
             yield data
@@ -143,7 +129,7 @@ async def stream_vessels():
 
 @app.post("/predict")
 async def predict(body: dict):
-    # very dumb rule: odd IMO → will change
+   
     call_id = body["id"]
     call = next(c for c in DB if c.id == call_id)
     will_change = call.vessel.imo % 2 == 1
