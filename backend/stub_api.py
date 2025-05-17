@@ -1,9 +1,14 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
-from fastapi.middleware.cors import CORSMiddleware
+from __future__ import annotations
+
+import asyncio, json
 from uuid import uuid4
 from datetime import datetime, timedelta
-from typing import Optional
+from typing import Optional, List
+
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
+from pydantic import BaseModel
 
 app = FastAPI()
 app.add_middleware(
@@ -13,11 +18,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
+# --------------------------------------------------------------------- #
+#  Models                                                               #
+# --------------------------------------------------------------------- #
 class BerthPlan(BaseModel):
     berthId: str
     start: datetime
     end: datetime
+
 
 class Vessel(BaseModel):
     imo: int
@@ -28,20 +36,19 @@ class Vessel(BaseModel):
     draft_m: float
     eta: datetime
 
-class VesselCall(BaseModel):
-    id: Optional[str] = None
-    vessel: Vessel
-    optimizerPlan: BerthPlan
+
 class AiPrediction(BaseModel):
     modelVersion: str
     willChange: bool
     confidence: Optional[float] = None
     suggestedPlan: Optional[BerthPlan] = None
 
+
 class ActualExecution(BaseModel):
     berthId: str
     ata: datetime
     atd: datetime
+
 
 class VesselCall(BaseModel):
     id: Optional[str] = None
@@ -52,9 +59,13 @@ class VesselCall(BaseModel):
     actualExecution: Optional[ActualExecution] = None
 
 
-DB: list[VesselCall] = []
+# --------------------------------------------------------------------- #
+#  In-memory “DB” and seed data                                         #
+# --------------------------------------------------------------------- #
+DB: List[VesselCall] = []
 
-def seed():
+
+def seed() -> None:
     now = datetime.utcnow()
     for i in range(3):
         DB.append(
@@ -84,29 +95,48 @@ def seed():
                         end=now + timedelta(hours=6 * i + 9),
                     ),
                 ),
-                humanPlan=BerthPlan(
-                    berthId="B06",
-                    start=now + timedelta(hours=6 * i + 2),
-                    end=now + timedelta(hours=6 * i + 10),
-                ),
-                actualExecution=ActualExecution(
-                    berthId="B04",
-                    ata=now + timedelta(hours=6 * i + 3),
-                    atd=now + timedelta(hours=6 * i + 11),
-                ),
             )
         )
 
+
 seed()
 
+# --------------------------------------------------------------------- #
+#  Simple event queue for SSE                                           #
+# --------------------------------------------------------------------- #
+event_queue: "asyncio.Queue[str]" = asyncio.Queue()
+
+
+async def broadcast(call: VesselCall) -> None:
+    """Push a JSON line to all EventSource subscribers."""
+    await event_queue.put(f"data: {call.model_dump_json()}\n\n")
+
+
+# --------------------------------------------------------------------- #
+#  REST + SSE endpoints                                                 #
+# --------------------------------------------------------------------- #
 @app.get("/vessels", response_model=list[VesselCall])
-def list_vessels():
+async def list_vessels() -> list[VesselCall]:
     return DB
 
-@app.post("/vessels", response_model=VesselCall)
-def create_vessel(call: VesselCall):
 
+@app.post("/vessels", response_model=VesselCall)
+async def create_vessel(call: VesselCall) -> VesselCall:
     call.id = call.id or str(uuid4())
     DB.append(call)
+    await broadcast(call)
     return call
 
+
+@app.get("/stream/vessels")
+async def stream_vessels():
+    async def event_generator():
+        # Send existing DB once on connect (optional)
+        for row in DB:
+            yield f"data: {row.model_dump_json()}\n\n"
+        # Then stream new rows
+        while True:
+            data = await event_queue.get()
+            yield data
+
+    return StreamingResponse(event_generator(), media_type="text/event-stream")

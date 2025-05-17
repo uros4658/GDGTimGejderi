@@ -1,0 +1,18 @@
+[
+  {
+    "vessel": {
+      "imo": 9123456,
+      "name": "Live Test",
+      "type": "CONTAINER",
+      "loa_m": 280,
+      "beam_m": 40,
+      "draft_m": 12,
+      "eta": "2025-05-28T12:30"
+    },
+    "optimizerPlan": {
+      "berthId": "B07",
+      "start": "2025-05-28T12:30",
+      "end": "2025-05-28T20:30"
+    }
+  }
+]
