@@ -13,7 +13,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# --- Pydantic models that match your JSON schema ----------
 
 class BerthPlan(BaseModel):
     berthId: str
@@ -45,14 +44,14 @@ class ActualExecution(BaseModel):
     atd: datetime
 
 class VesselCall(BaseModel):
-    id: str
+    id: Optional[str] = None
     vessel: Vessel
     optimizerPlan: BerthPlan
     aiPrediction: Optional[AiPrediction] = None
     humanPlan: Optional[BerthPlan] = None
     actualExecution: Optional[ActualExecution] = None
 
-# --- Hard-coded list used by both /vessels and POST /vessels
+
 DB: list[VesselCall] = []
 
 def seed():
