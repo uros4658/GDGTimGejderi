@@ -1,0 +1,8 @@
+# install deps
+pip install torch pandas scikit-learn joblib
+
+# train the model
+python train.py
+
+# predict next berth
+python predict.py
