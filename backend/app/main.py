@@ -1,11 +1,12 @@
 from fastapi import FastAPI
-from app.db import engine
 from app.models import Base
-
-Base.metadata.create_all(bind=engine)
+from app.db import engine
+from app.routers import vessels
 
 app = FastAPI()
+Base.metadata.create_all(bind=engine)
+app.include_router(vessels.router)
 
 @app.get("/")
-def read_root():
-    return {"status": "OK"}
+def root():
+    return {"status": "ok"}
