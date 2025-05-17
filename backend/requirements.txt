@@ -5,3 +5,6 @@ alembic
 pydantic
 python-dotenv
 bcrypt 
+pandas
+numpy
+scikit-learn

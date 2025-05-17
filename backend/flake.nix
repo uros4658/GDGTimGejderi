@@ -13,8 +13,14 @@
       perSystem = { config, self', inputs', pkgs, system, ... }: {
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
-            # dbeaver-bin
-            python3
+            dbeaver-bin
+              (pkgs.python3.withPackages (python-pkgs: with python-pkgs; [
+                                          pandas
+                                          numpy
+                                          scikit-learn
+              ]))
+            postgresql_17
+            gcc
           ];
         };
       };
