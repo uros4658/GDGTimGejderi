@@ -4,7 +4,6 @@ import { NavLink, Outlet } from 'react-router-dom';
 export default function Layout() {
   return (
     <Flex minH="100vh">
-      {/* ----- Sidebar ------------------------------------------------ */ }
       <Box
         as="aside"
         w="220px"
@@ -27,10 +26,12 @@ export default function Layout() {
           <Link as={NavLink} to="/history" _activeLink={{ fontWeight: 'bold' }}>
             History
           </Link>
+           <Link as={NavLink} to="/ping" _activeLink={{ fontWeight: 'bold' }}>
+            Ping
+          </Link>
         </VStack>
       </Box>
 
-      {/* ----- Main outlet -------------------------------------------- */ }
       <Box flex="1" p={6} bg="gray.50">
         <Outlet />
       </Box>

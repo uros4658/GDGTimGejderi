@@ -17,20 +17,39 @@ api.interceptors.request.use(
     cfg.headers = cfg.headers ?? new AxiosHeaders();
     (cfg.headers as AxiosHeaders).set(
       'X-API-KEY',
-      (import.meta.env.VITE_API_KEY as string | undefined) ?? ''
+      'hackathon42'
     );
     return cfg;
   },
 );
 
 export const getVessels = async (): Promise<VesselCall[]> => {
-  const resp: AxiosResponse<VesselCall[]> = await api.get('/vessels');
-  return resp.data;
+  const { data } = await api.get<any[]>('/vessels');
+
+  return data.map((r) => ({
+    id: r.id,
+    vessel: {
+      imo: r.imo,
+      name: r.vessel_name,
+      type: r.vessel_type,
+      loa_m: r.loa_m,
+      beam_m: r.beam_m,
+      draft_m: r.draft_m,
+      eta: r.eta,
+      etd: r.etd,
+    },
+    optimizerPlan: {
+      berthId: r.optimizer_berth_id,
+      start: r.optimizer_start,
+      end: r.optimizer_end,
+    },
+  }));
 };
 
-export const predictWillChange = (callId: string) =>
-  api
-    .post<{ willChange: boolean; confidence: number }>('/predict', { id: callId })
-    .then((r) => r.data);
+
+// export const predictWillChange = (callId: string) =>
+//   api
+//     .post<{ willChange: boolean; confidence: number }>('/predict', { id: callId })
+//     .then((r) => r.data);
 
 export default api;

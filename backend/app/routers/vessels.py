@@ -13,12 +13,12 @@ def get_db():
     finally:
         db.close()
 
-# GET /vessels - list 20 most recent
-@router.get("/")
+
+@router.get("")
 def list_vessels(db: Session = Depends(get_db)):
     return db.query(VesselCall).order_by(VesselCall.created_at.desc()).limit(20).all()
 
-# GET /vessels/{id} - fetch single record
+
 @router.get("/{vessel_id}")
 def get_vessel(vessel_id: int, db: Session = Depends(get_db)):
     vessel = db.query(VesselCall).get(vessel_id)
@@ -26,8 +26,8 @@ def get_vessel(vessel_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Vessel not found")
     return vessel
 
-# POST /vessels - create new vessel call
-@router.post("/")
+
+@router.post("")
 def create_vessel(payload: dict, db: Session = Depends(get_db)):
     vessel = VesselCall(
         imo=payload["imo"],

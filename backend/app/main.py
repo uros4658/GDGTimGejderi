@@ -8,9 +8,16 @@ from app.routers import retrain
 from fastapi.routing import APIRouter
 from app.middleware.auth import APIKeyRoute
 from app.routers import auth
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],        
+    allow_methods=["*"],        
+    allow_headers=["*"],       
+    allow_credentials=False,    
+)
 Base.metadata.create_all(bind=engine)
 app.include_router(vessels.router)
 app.include_router(stream.router)

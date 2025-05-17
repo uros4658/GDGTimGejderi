@@ -1,89 +1,113 @@
-import {
-  Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay,
-  DrawerCloseButton, DrawerFooter, Button, useToast, VStack, Text, Box,
-  Input, Alert, AlertIcon,
-} from '@chakra-ui/react';
-import { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import api from '@/lib/api';
-import { vesselCallArraySchema, type NewVesselCall } from '@/types/zodSchemas';
+import { useEffect } from 'react';
+import { motion, useAnimationControls } from 'framer-motion';
+import { Box, Text } from '@chakra-ui/react';
+
+type RawCall = {
+  id: string;
+  vessel?: { name?: string };
+  optimizerPlan?: { berthId?: string; start?: string; end?: string };
+  vessel_name?: string;
+  optimizer_berth_id?: string;
+  optimizer_start?: string;
+  optimizer_end?: string;
+  berthId?: string;
+  eta?: string;
+  etd?: string;
+};
 
 interface Props {
-  isOpen: boolean;
-  onClose(): void;
+  calls: RawCall[];
+  speed?: number; 
 }
 
-export default function ImportJsonDrawer({ isOpen, onClose }: Props) {
-  const toast = useToast();
-  const qc = useQueryClient();
-  const [errorMsg, setErrorMsg] = useState('');
-
-  const handleFile = async (file: File | null) => {
-    if (!file) return;
-    try {
-      const text = await file.text();
-      const parsed = JSON.parse(text);
-      const calls = vesselCallArraySchema.parse(parsed);   // throws if invalid
-      mutate(calls);                                       // trigger POSTs
-    } catch (err: any) {
-      setErrorMsg(err.message ?? 'Invalid JSON');
-    }
+function toFinal(c: RawCall) {
+  return {
+    id: c.id,
+    name:
+      c.vessel?.name ??
+      c.vessel_name ??
+      'Unknown',
+    berthId:
+      c.berthId ??
+      c.optimizerPlan?.berthId ??
+      c.optimizer_berth_id ??
+      '???',
+    eta:
+      c.eta ??
+      c.optimizerPlan?.start ??
+      c.optimizer_start ??
+      new Date().toISOString(),
+    etd:
+      c.etd ??
+      c.optimizerPlan?.end ??
+      c.optimizer_end ??
+      new Date().toISOString(),
   };
+}
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: async (calls: NewVesselCall[]) => {
-      for (const c of calls) {
-        await api.post('/vessels', c);
-      }
-    },
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['vessels'] });
-      toast({ status: 'success', title: 'Imported successfully' });
-      onClose();
-    },
-    onError: () => {
-      toast({ status: 'error', title: 'Import failed' });
-    },
+export default function BoatStage({ calls, speed = 1 }: Props) {
+  const ctrl = useAnimationControls();
+
+  const timeline = calls
+    .map(toFinal)
+    .filter((r) => r.berthId && r.eta && r.etd)
+    .sort(
+      (a, b) => new Date(a.eta).getTime() - new Date(b.eta).getTime()
+    );
+
+  const t0 = timeline.length ? new Date(timeline[0].eta).getTime() : 0;
+  const hourMs = 3600000 / speed;
+
+  useEffect(() => {
+  timeline.forEach((c) => {
+    const eta = new Date(c.eta).getTime();
+    const etd = new Date(c.etd).getTime();
+
+    const hoursToMs = (h: number) => h * 1000;
+    const delay = hoursToMs((eta - t0) / hourMs);
+    const stay  = hoursToMs((etd - eta) / hourMs);
+
+    setTimeout(() => {
+      ctrl.start(i =>
+  i === c.id ? { x: '-110vw', transition: { duration: 1 } } : {}
+);
+
+      setTimeout(() => {
+       ctrl.start(i =>
+  i === c.id ? { x: '-110vw', transition: { duration: 1 } } : {}
+);
+      }, stay);
+    }, delay);
   });
+}, [timeline, ctrl, t0, hourMs]);
+
+  const berthOrder = [...new Set(timeline.map((c) => c.berthId))].sort().reverse();
+  const laneY = (berth: string) => `${25 * berthOrder.indexOf(berth)}%`;
 
   return (
-    <Drawer isOpen={isOpen} placement="right" size="sm" onClose={onClose} scrollBehavior="inside">
-      <DrawerOverlay />
-      <DrawerContent>
-        <DrawerCloseButton />
-        <DrawerHeader borderBottomWidth="1px">Import JSON file</DrawerHeader>
-
-        <DrawerBody>
-          <VStack spacing={4} align="stretch">
-            <Box>
-              <Text fontSize="sm" mb={2}>
-                Select a <b>.json</b> file that contains an <i>array</i> of vessel calls.
-              </Text>
-              <Input
-                type="file"
-                accept=".json,application/json"
-                onChange={(e) => handleFile(e.target.files?.[0] ?? null)}
-              />
-            </Box>
-
-            {errorMsg && (
-              <Alert status="error">
-                <AlertIcon />
-                {errorMsg}
-              </Alert>
-            )}
-          </VStack>
-        </DrawerBody>
-
-        <DrawerFooter borderTopWidth="1px">
-          <Button variant="outline" mr={3} onClick={onClose}>
-            Close
-          </Button>
-          <Button isLoading={isPending} colorScheme="blue" onClick={() => {}}>
-            {isPending ? 'Uploading' : 'Done'}
-          </Button>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
+    <Box pos="relative" w="100%" h="300px" bg="blue.50" overflow="hidden">
+      {timeline.map((c) => (
+        <motion.div
+          key={c.id}
+          custom={c.id}
+          animate={ctrl}
+          initial={{ x: '110vw', y: laneY(c.berthId) }}
+          style={{
+            position: 'absolute',
+            width: 80,
+            height: 24,
+            background: '#0364e6',
+            borderRadius: 4,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#fff',
+            fontSize: 10,
+          }}
+        >
+          <Text>{c.name}</Text>
+        </motion.div>
+      ))}
+    </Box>
   );
 }

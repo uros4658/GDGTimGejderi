@@ -8,6 +8,7 @@ export const vesselCallSchema = z.object({
     beam_m: z.number().positive(),
     draft_m: z.number().positive(),
     eta: z.string(),
+    etd: z.string()
   }),
   optimizerPlan: z.object({
     berthId: z.string().min(1),
