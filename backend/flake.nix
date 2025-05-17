@@ -18,6 +18,15 @@
                                           pandas
                                           numpy
                                           scikit-learn
+                                          fastapi
+                                          sqlalchemy
+                                          psycopg2
+                                          alembic
+                                          pydantic
+                                          python-dotenv
+                                          bcrypt
+                                          uvicorn
+                                          pip
               ]))
             postgresql_17
             gcc
