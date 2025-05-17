@@ -3,28 +3,23 @@ import axios, {
   type InternalAxiosRequestConfig,
   type AxiosResponse,
   AxiosHeaders,
-} from 'axios';
-import type { VesselCall } from '@/types/server';
-
+} from "axios";
+import type { VesselCall } from "@/types/server";
 
 const api: AxiosInstance = axios.create({
-  baseURL: (import.meta.env.VITE_API_URL as string) ?? 'http://localhost:8000',
+  baseURL: (import.meta.env.VITE_API_URL as string) ?? "http://localhost:8000",
 });
-
 
 api.interceptors.request.use(
   (cfg: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
     cfg.headers = cfg.headers ?? new AxiosHeaders();
-    (cfg.headers as AxiosHeaders).set(
-      'X-API-KEY',
-      'hackathon42'
-    );
+    (cfg.headers as AxiosHeaders).set("X-API-KEY", "hackathon42");
     return cfg;
-  },
+  }
 );
 
 export const getVessels = async (): Promise<VesselCall[]> => {
-  const { data } = await api.get<any[]>('/vessels');
+  const { data } = await api.get<any[]>("/vessels");
 
   return data.map((r) => ({
     id: r.id,
@@ -46,10 +41,11 @@ export const getVessels = async (): Promise<VesselCall[]> => {
   }));
 };
 
-
-// export const predictWillChange = (callId: string) =>
-//   api
-//     .post<{ willChange: boolean; confidence: number }>('/predict', { id: callId })
-//     .then((r) => r.data);
+export const predictWillChange = (callId: string) =>
+  api
+    .post<{ willChange: boolean; confidence: number }>("/predict", {
+      id: callId,
+    })
+    .then((r) => r.data);
 
 export default api;

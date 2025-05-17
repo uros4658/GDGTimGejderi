@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 import {
   Center,
   Spinner,
@@ -7,11 +7,11 @@ import {
   Flex,
   Spacer,
   Heading,
-} from '@chakra-ui/react';
-// import LiveTable from '@/components/LiveTable';
-import AnimationDrawer from '@/components/AnimationDrawer';   // ← new
-import { getVessels } from '@/lib/api';
-import { useVesselFeed } from '@/hooks/useVesselFeed';
+} from "@chakra-ui/react";
+import LiveTable from "@/components/LiveTable";
+import AnimationDrawer from "@/components/AnimationDrawer"; // ← new
+import { getVessels } from "@/lib/api";
+import { useVesselFeed } from "@/hooks/useVesselFeed";
 
 export default function Dashboard() {
   useVesselFeed();
@@ -21,7 +21,7 @@ export default function Dashboard() {
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ['vessels'],
+    queryKey: ["vessels"],
     queryFn: getVessels,
   });
 
@@ -44,14 +44,13 @@ export default function Dashboard() {
 
   return (
     <>
-      
-     <Flex align="center" mb={4}>
-  <Heading size="md">Live Berth Plan</Heading>
-  <Spacer />
-  <AnimationDrawer />
-</Flex>
+      <Flex align="center" mb={4}>
+        <Heading size="md">Live Berth Plan</Heading>
+        <Spacer />
+        <AnimationDrawer />
+      </Flex>
 
-      {/* <LiveTable data={data} /> */}
+      <LiveTable data={data} />
     </>
   );
 }
