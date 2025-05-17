@@ -1,7 +1,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
 import os
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:miskopisko@localhost:5432/simulationData")
+
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:miskopisko@uros:5432/simulationData")
 
 
 # Set echo to False to reduce SQL log noise
