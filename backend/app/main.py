@@ -8,6 +8,7 @@ from app.routers import retrain
 from fastapi.routing import APIRouter
 from app.middleware.auth import APIKeyRoute
 from app.routers import auth
+from app.routers import mockBerthPlan
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
