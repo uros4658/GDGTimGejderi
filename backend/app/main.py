@@ -24,7 +24,6 @@ app.include_router(stream.router)
 app.include_router(metrics.router)
 app.include_router(retrain.router)
 app.include_router(auth.router)
-app.include_router(mockBerthPlan.router)
 app.router.route_class = APIKeyRoute
 
 

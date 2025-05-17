@@ -21,6 +21,7 @@
     "ajv": "^8.17.1",
     "axios": "^1.9.0",
     "framer-motion": "^10.18.0",
+    "gsap": "^3.13.0",
     "lucide-react": "0.370.0",
     "luxon": "^3.6.1",
     "react": "^19.1.0",
@@ -33,6 +34,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
+    "@types/gsap": "^3.0.0",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@types/uuid": "^10.0.0",

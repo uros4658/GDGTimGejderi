@@ -1,113 +1,129 @@
-import { useEffect } from 'react';
-import { motion, useAnimationControls } from 'framer-motion';
-import { Box, Text } from '@chakra-ui/react';
+import {
+  Alert,
+  AlertIcon,
+  Button,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  Input,
+  Text,
+  VStack,
+  useToast,
+} from '@chakra-ui/react';
+import { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { v4 as uuidv4 } from 'uuid';
+import { FiCheckCircle, FiXCircle } from 'react-icons/fi';
 
-type RawCall = {
-  id: string;
-  vessel?: { name?: string };
-  optimizerPlan?: { berthId?: string; start?: string; end?: string };
-  vessel_name?: string;
-  optimizer_berth_id?: string;
-  optimizer_start?: string;
-  optimizer_end?: string;
-  berthId?: string;
-  eta?: string;
-  etd?: string;
-};
+import api from '@/lib/api';
+import { vesselCallArraySchema } from '@/types/zodSchemas';
+import type { NewVesselCall } from '@/types/new-call';
+import type { VesselCall } from '@/types/server';
+
+type PostPayload = NewVesselCall & { id: string };
 
 interface Props {
-  calls: RawCall[];
-  speed?: number; 
+  isOpen: boolean;
+  onClose(): void;
 }
 
-function toFinal(c: RawCall) {
-  return {
-    id: c.id,
-    name:
-      c.vessel?.name ??
-      c.vessel_name ??
-      'Unknown',
-    berthId:
-      c.berthId ??
-      c.optimizerPlan?.berthId ??
-      c.optimizer_berth_id ??
-      '???',
-    eta:
-      c.eta ??
-      c.optimizerPlan?.start ??
-      c.optimizer_start ??
-      new Date().toISOString(),
-    etd:
-      c.etd ??
-      c.optimizerPlan?.end ??
-      c.optimizer_end ??
-      new Date().toISOString(),
-  };
-}
+export default function ImportJsonDrawer({ isOpen, onClose }: Props) {
+  const toast = useToast();
+  const qc = useQueryClient();
+  const [errorMsg, setErrorMsg] = useState('');
 
-export default function BoatStage({ calls, speed = 1 }: Props) {
-  const ctrl = useAnimationControls();
-
-  const timeline = calls
-    .map(toFinal)
-    .filter((r) => r.berthId && r.eta && r.etd)
-    .sort(
-      (a, b) => new Date(a.eta).getTime() - new Date(b.eta).getTime()
-    );
-
-  const t0 = timeline.length ? new Date(timeline[0].eta).getTime() : 0;
-  const hourMs = 3600000 / speed;
-
-  useEffect(() => {
-  timeline.forEach((c) => {
-    const eta = new Date(c.eta).getTime();
-    const etd = new Date(c.etd).getTime();
-
-    const hoursToMs = (h: number) => h * 1000;
-    const delay = hoursToMs((eta - t0) / hourMs);
-    const stay  = hoursToMs((etd - eta) / hourMs);
-
-    setTimeout(() => {
-      ctrl.start(i =>
-  i === c.id ? { x: '-110vw', transition: { duration: 1 } } : {}
-);
-
-      setTimeout(() => {
-       ctrl.start(i =>
-  i === c.id ? { x: '-110vw', transition: { duration: 1 } } : {}
-);
-      }, stay);
-    }, delay);
+  const importMut = useMutation<VesselCall[], Error, PostPayload[]>({
+    mutationFn: async (payloadArr) =>
+      Promise.all(
+        payloadArr.map((p) => api.post('/vessels', p).then((r) => r.data))
+      ),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['vessels'] });
+      toast({
+        status: 'success',
+        title: 'Imported successfully',
+        icon: <FiCheckCircle />,
+      });
+      onClose();
+    },
+    onError: () =>
+      toast({
+        status: 'error',
+        title: 'Import failed',
+        icon: <FiXCircle />,
+      }),
   });
-}, [timeline, ctrl, t0, hourMs]);
 
-  const berthOrder = [...new Set(timeline.map((c) => c.berthId))].sort().reverse();
-  const laneY = (berth: string) => `${25 * berthOrder.indexOf(berth)}%`;
+  const handleFile = async (file: File | null) => {
+    if (!file) return;
+    try {
+      const text = await file.text();
+      const parsed = JSON.parse(text);
+      const calls = vesselCallArraySchema.parse(parsed);
+      const payload: PostPayload[] = calls.map((c) => ({
+        id: uuidv4(),
+        ...c,
+      }));
+      importMut.mutate(payload);
+      setErrorMsg('');
+    } catch (err: any) {
+      setErrorMsg(err.message ?? 'Invalid JSON');
+    }
+  };
 
   return (
-    <Box pos="relative" w="100%" h="300px" bg="blue.50" overflow="hidden">
-      {timeline.map((c) => (
-        <motion.div
-          key={c.id}
-          custom={c.id}
-          animate={ctrl}
-          initial={{ x: '110vw', y: laneY(c.berthId) }}
-          style={{
-            position: 'absolute',
-            width: 80,
-            height: 24,
-            background: '#0364e6',
-            borderRadius: 4,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#fff',
-            fontSize: 10,
-          }}
-        >
-          <Text>{c.name}</Text>
-        </motion.div>
-      ))}
-    </Box>
+    <Drawer
+      isOpen={isOpen}
+      placement="right"
+      size="sm"
+      onClose={onClose}
+      scrollBehavior="inside"
+    >
+      <DrawerOverlay />
+      <DrawerContent>
+        <DrawerCloseButton />
+
+        <DrawerHeader borderBottomWidth="1px">
+          Import vessel calls
+        </DrawerHeader>
+
+        <DrawerBody>
+          <VStack spacing={6} align="stretch">
+            <VStack spacing={1} align="stretch">
+              <Text fontWeight="medium">Choose a .json file</Text>
+              <Input
+                type="file"
+                accept=".json,application/json"
+                onChange={(e) => handleFile(e.target.files?.[0] ?? null)}
+              />
+            </VStack>
+
+            {errorMsg && (
+              <Alert status="error">
+                <AlertIcon />
+                {errorMsg}
+              </Alert>
+            )}
+          </VStack>
+        </DrawerBody>
+
+        <DrawerFooter borderTopWidth="1px">
+          <Button variant="ghost" mr={3} onClick={onClose}>
+            Cancel
+          </Button>
+          <Button
+            colorScheme="blue"
+            isLoading={importMut.isPending}
+            loadingText="Uploading"
+          >
+            Done
+          </Button>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 }

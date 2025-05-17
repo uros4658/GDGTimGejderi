@@ -1,38 +1,88 @@
-import { Flex, Box, Link, VStack } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  HStack,
+  Icon,
+  Text,
+  VStack,
+  useColorModeValue as mode,
+} from '@chakra-ui/react';
 import { NavLink, Outlet } from 'react-router-dom';
+import {
+  FiMap,
+  FiPlusCircle,
+  FiClock,
+  FiActivity,
+} from 'react-icons/fi';
+
+// 🔹 simple helper – one nav item
+function NavItem({
+  to,
+  icon,
+  children,
+}: {
+  to: string;
+  icon: any;
+  children: string;
+}) {
+  return (
+    <HStack
+      as={NavLink}
+      to={to}
+      px={4}
+      py={3}
+      rounded="md"
+      _hover={{ bg: 'whiteAlpha.200' }}
+      _activeLink={{ bg: 'whiteAlpha.300', fontWeight: 'bold' }}
+      w="full"
+      spacing={3}
+    >
+      <Icon as={icon} boxSize={5} />
+      <Text display={{ base: 'none', lg: 'inline' }}>{children}</Text>
+    </HStack>
+  );
+}
 
 export default function Layout() {
   return (
-    <Flex minH="100vh">
+    <Flex minH="100vh" bg={mode('gray.50', 'gray.800')}>
+      {/* ░░ sidebar ░░ */}
       <Box
         as="aside"
-        w="220px"
-        bg="blue.600"
+        w={{ base: 20, lg: 260 }}
+        bg="blue.700"
         color="white"
-        p={6}
-        fontWeight="medium"
+        py={8}
+        px={4}
+        boxShadow="xl"
       >
-        <Box fontSize="2xl" fontWeight="bold" mb={8}>
-          Berth UI
-        </Box>
+        <Text
+          fontSize={{ base: 'xl', lg: '2xl' }}
+          fontWeight="bold"
+          mb={10}
+          textAlign={{ base: 'center', lg: 'left' }}
+        >
+          Berth&nbsp;UI
+        </Text>
 
-        <VStack align="start" spacing={4}>
-          <Link as={NavLink} to="/dashboard" _activeLink={{ fontWeight: 'bold' }}>
+        <VStack align="stretch" spacing={2}>
+          <NavItem to="/dashboard" icon={FiMap}>
             Dashboard
-          </Link>
-          <Link as={NavLink} to="/new-call" _activeLink={{ fontWeight: 'bold' }}>
+          </NavItem>
+          <NavItem to="/new-call" icon={FiPlusCircle}>
             New Call
-          </Link>
-          <Link as={NavLink} to="/history" _activeLink={{ fontWeight: 'bold' }}>
+          </NavItem>
+          <NavItem to="/history" icon={FiClock}>
             History
-          </Link>
-           <Link as={NavLink} to="/ping" _activeLink={{ fontWeight: 'bold' }}>
+          </NavItem>
+          <NavItem to="/ping" icon={FiActivity}>
             Ping
-          </Link>
+          </NavItem>
         </VStack>
       </Box>
 
-      <Box flex="1" p={6} bg="gray.50">
+      {/* ░░ main ░░ */}
+      <Box flex="1" p={{ base: 4, lg: 8 }} overflow="auto">
         <Outlet />
       </Box>
     </Flex>
