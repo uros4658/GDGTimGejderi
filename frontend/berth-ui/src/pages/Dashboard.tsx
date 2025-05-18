@@ -38,17 +38,30 @@ export default function Dashboard() {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  // map your PlanItem[] to BoatStage.Row[]
+  const start = startDate ? new Date(startDate) : null;
+  const end = endDate ? new Date(endDate) : null;
+
+  // Filter schedule based on time range
+  const filteredSchedule = useMemo(() => {
+    return schedule.filter((item) => {
+      const eta = new Date(item.endTime);
+      if (start && eta < start) return false;
+      if (end && eta > end) return false;
+      return true;
+    });
+  }, [schedule, startDate, endDate]);
+
+  // Map filtered data for animation
   const animationRows = useMemo(() => {
-    return schedule.map((item) => ({
+    return filteredSchedule.map((item) => ({
       id: item.vesselId,
-      vessel_name: `Vessel ${item.vesselId}`,    // or pull real name if you have it
+      vessel_name: `Vessel ${item.vesselId}`, // Replace with real name if available
       optimizer_berth_id: String(item.berthId),
       arrival: item.startTime,
       optimizer_start: item.startTime,
       optimizer_end: item.endTime,
     }));
-  }, [schedule]);
+  }, [filteredSchedule]);
 
   if (isLoading) {
     return (
@@ -57,6 +70,7 @@ export default function Dashboard() {
       </Center>
     );
   }
+
   if (isError) {
     return (
       <Alert status="error">
@@ -73,7 +87,7 @@ export default function Dashboard() {
         <Spacer />
 
         <FormControl maxW="250px">
-          <FormLabel mb={1}>From ETA</FormLabel>
+          <FormLabel mb={1}>From End Time</FormLabel>
           <Input
             type="datetime-local"
             size="sm"
@@ -83,7 +97,7 @@ export default function Dashboard() {
         </FormControl>
 
         <FormControl maxW="250px">
-          <FormLabel mb={1}>To ETA</FormLabel>
+          <FormLabel mb={1}>To End Time</FormLabel>
           <Input
             type="datetime-local"
             size="sm"
@@ -97,7 +111,7 @@ export default function Dashboard() {
         </Button>
       </Flex>
 
-      <LiveTable data={schedule} />
+      <LiveTable data={filteredSchedule} />
 
       <Drawer isOpen={isOpen} placement="right" size="xl" onClose={onClose}>
         <DrawerOverlay />
