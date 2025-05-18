@@ -13,11 +13,6 @@ def get_db():
     finally:
         db.close()
 
-
-# @router.get("")
-# def list_vessels(db: Session = Depends(get_db)):
-#     return db.query(VesselCall).order_by(VesselCall.created_at.desc()).limit(20).all()
-
 @router.get("")
 def list_vessels(db: Session = Depends(get_db)):
     latest_actual_id = db.query(Vessel.actual_id).order_by(Vessel.actual_id.desc()).first()
@@ -43,20 +38,6 @@ def create_vessel(payload: dict, db: Session = Depends(get_db)):
         dwt_t=payload["dwt_t"]
     )
     db.add(vessel)
-    db.commit()
-    db.refresh(vessel)
-    return vessel
-
-@router.patch("/{actual_id}/human-plan")
-def override_plan(vessel_id: int, payload: dict, db: Session = Depends(get_db)):
-    vessel = db.query(Vessel).filter(Vessel.actual_id == vessel_id).first()
-    if not vessel:
-        raise HTTPException(status_code=404, detail="Vessel not found")
-    
-    # Update the vessel's plan with the provided payload
-    for key, value in payload.items():
-        setattr(vessel, key, value)
-    
     db.commit()
     db.refresh(vessel)
     return vessel
