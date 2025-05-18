@@ -45,6 +45,24 @@ export default function LiveTable({ data }: Props) {
       },
     },
     {
+      accessorFn: (row) => row.actualStartTime,
+      id: "actualStartTime",
+      header: "Actual Start",
+      cell: (info) => {
+        const v = info.getValue<string>();
+        return v ? v.replace("T", " ").slice(0, 16) : "–";
+      },
+    },
+    {
+      accessorFn: (row) => row.actualEndTime,
+      id: "actualEndTime",
+      header: "Actual End",
+      cell: (info) => {
+        const v = info.getValue<string>();
+        return v ? v.replace("T", " ").slice(0, 16) : "–";
+      },
+    },
+    {
       accessorKey: "berthId",
       header: "Berth ID",
     },

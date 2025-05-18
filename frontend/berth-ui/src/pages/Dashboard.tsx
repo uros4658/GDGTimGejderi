@@ -9,11 +9,19 @@ import {
   Input,
   FormControl,
   FormLabel,
+  Button,
+  useDisclosure,
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  DrawerHeader,
+  DrawerBody,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { useState, useMemo } from "react";
 import LiveTable from "@/components/LiveTable";
-import AnimationDrawer from "@/components/AnimationDrawer";
+import BoatStage from "@/components/BoatStage";
 import { getPlan } from "@/lib/api";
 import type { PlanItem } from "@/types/server";
 
@@ -21,16 +29,26 @@ export default function Dashboard() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  const {
-    data,
-    isLoading,
-    isError,
-  } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["plan"],
     queryFn: getPlan,
   });
 
   const schedule: PlanItem[] = data?.schedule ?? [];
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  // map your PlanItem[] to BoatStage.Row[]
+  const animationRows = useMemo(() => {
+    return schedule.map((item) => ({
+      id: item.vesselId,
+      vessel_name: `Vessel ${item.vesselId}`,    // or pull real name if you have it
+      optimizer_berth_id: String(item.berthId),
+      arrival: item.startTime,
+      optimizer_start: item.startTime,
+      optimizer_end: item.endTime,
+    }));
+  }, [schedule]);
 
   if (isLoading) {
     return (
@@ -39,7 +57,6 @@ export default function Dashboard() {
       </Center>
     );
   }
-
   if (isError) {
     return (
       <Alert status="error">
@@ -75,10 +92,23 @@ export default function Dashboard() {
           />
         </FormControl>
 
-        <AnimationDrawer />
+        <Button colorScheme="purple" onClick={onOpen}>
+          Play animation
+        </Button>
       </Flex>
 
       <LiveTable data={schedule} />
+
+      <Drawer isOpen={isOpen} placement="right" size="xl" onClose={onClose}>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>Plan animation</DrawerHeader>
+          <DrawerBody>
+            <BoatStage calls={animationRows} playMs={120_000} />
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
     </>
   );
 }
