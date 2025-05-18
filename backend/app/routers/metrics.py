@@ -15,15 +15,14 @@ def get_db():
 
 @router.get("/24h")
 def accuracy_last_24h(db: Session = Depends(get_db)):
-    cutoff = datetime.utcnow() - timedelta(hours=24)
+    cutoff = datetime.now() - timedelta(hours=24)
     logs = db.query(PredictionLog).filter(PredictionLog.timestamp >= cutoff).all()
 
     if not logs:
-        return {"accuracy": None, "total": 0}
+        return {"errors": []}
 
-    correct = sum(1 for log in logs if (log.will_change and log.confidence >= 0.5) or
-                                           (not log.will_change and log.confidence < 0.5))
     return {
-        "accuracy": round(correct / len(logs), 4),
-        "total": len(logs)
+        "errors": [
+            log.error for log in logs
+        ],
     }

@@ -19,7 +19,7 @@ import { useVesselFeed } from "@/hooks/useVesselFeed";
 import type { VesselCall } from "@/types/server";
 
 export default function Dashboard() {
-  useVesselFeed();
+  
 
   const {
     data = [],
@@ -29,7 +29,7 @@ export default function Dashboard() {
     queryKey: ["vessels"],
     queryFn: getVessels,
   });
-
+  console.log("Vessel data", data);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
