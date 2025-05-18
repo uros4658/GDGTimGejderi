@@ -15,6 +15,7 @@ import {
   getSortedRowModel,
   useReactTable,
   type SortingState,
+  type ColumnDef,
 } from "@tanstack/react-table";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -26,78 +27,70 @@ interface Props {
 }
 
 export default function LiveTable({ data }: Props) {
+  console.log("Vessel data1", data);
   const [sorting, setSorting] = useState<SortingState>([
     { id: "eta", desc: false },
   ]);
 
-  const columns = [
+  const columns: ColumnDef<VesselCall>[] = [
+
     {
-      accessorFn: (row: VesselCall) => row.vessel?.imo ?? "–",
-      id: "imo",
-      header: "IMO",
+      accessorFn: (row) => row.vessel?.loa_m,
+      id: "loa",
+      header: "Loa (m)",
+      cell: (info) => {
+        const v = info.getValue<number>();
+        return v != null ? v.toFixed(2) : "–";
+      },
     },
     {
-      accessorFn: (row: VesselCall) => row.vessel?.name ?? "–",
-      id: "name",
-      header: "Name",
+      accessorFn: (row) => row.vessel?.beam_m,
+      id: "beam",
+      header: "Beam (m)",
+      cell: (info) => {
+        const v = info.getValue<number>();
+        return v != null ? v.toFixed(2) : "–";
+      },
     },
     {
-      accessorFn: (row: VesselCall) => row.optimizerPlan?.berthId ?? "–",
-      id: "berth",
-      header: "Berth",
+      accessorFn: (row) => row.vessel?.draft_m,
+      id: "draft",
+      header: "Draft (m)",
+      cell: (info) => {
+        const v = info.getValue<number>();
+        return v != null ? v.toFixed(2) : "–";
+      },
     },
     {
-      accessorFn: (row: VesselCall) => row.vessel?.eta ?? "",
+      accessorFn: (row) => row.vessel?.eta ?? "",
       id: "eta",
       header: "ETA",
       cell: (info) => {
-        const val = info.getValue();
-        return val ? val.slice(0, 16).replace("T", " ") : "–";
+        const v = info.getValue<string>();
+        return v ? v.slice(0, 16).replace("T", " ") : "–";
       },
     },
-    {
-      id: "prediction",
-      header: "AI",
-      cell: (info: any) => {
-        const row = info.row.original as VesselCall;
-
-        const serverPred = row.aiPrediction?.willChange;
-        const serverConf = row.aiPrediction?.confidence;
-
-        const { data } = useQuery({
-          queryKey: ["predict", row.id],
-          queryFn: () => predictWillChange(row.id),
-          enabled: serverPred === undefined,
-          staleTime: 5 * 60 * 1000,
-        });
-
-        const willChange =
-          serverPred !== undefined ? serverPred : data?.willChange;
-        const conf = serverConf !== undefined ? serverConf : data?.confidence;
-
-        if (willChange === undefined) return <Spinner size="xs" />;
-
-        return (
-          <Tag
-            colorScheme={willChange ? "red" : "green"}
-            title={conf ? `Conf: ${(conf * 100).toFixed(1)} %` : undefined}
-          >
-            {willChange ? "Change" : "Keep"}
-          </Tag>
-        );
-      },
-    },
+ 
   ];
+
+  const defaultColumn: Partial<ColumnDef<VesselCall>> = {
+    cell: (info) => {
+      const v = info.getValue<any>();
+      return v == null ? "–" : String(v);
+    },
+  };
 
   const table = useReactTable({
     data,
     columns,
+    defaultColumn,
     state: { sorting },
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
   });
 
+  console.log("table rows:", table.getRowModel().rows);
   return (
     <TableContainer maxH="70vh" overflowY="auto">
       <Table size="sm">
