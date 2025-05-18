@@ -69,7 +69,7 @@ def seed_vessels(session, n=25):
     for i in range(n):
         eta = now + timedelta(hours=random.randint(1, 48))
         vessel = Vessel(
-            actual_id=1000 + i,
+            actual_id=1000,
             name=f"Vessel-{i}",
             type=random.choice(["CONTAINER", "BULK", "RORO", "TANKER"]),
             loa_m=random.uniform(180, 300),
@@ -77,7 +77,7 @@ def seed_vessels(session, n=25):
             draft_m=random.uniform(8, 14),
             dwt_t=random.uniform(20000, 120000),
             eta=eta,
-            ebt=eta + timedelta(hours=1)
+            ebt=random.uniform(1, 10)
         )
         session.add(vessel)
     session.flush()  # So vessels get IDs

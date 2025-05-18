@@ -72,7 +72,7 @@ def generate_vessels(berths, n=25):
         berth = random.choice(berths)
         vessels.append({
             "id": i+1,
-            "actual_id": 1000+i,
+            "actual_id": 1000,
             "name": f"Vessel-{i}",
             "type": random.choice(["CONTAINER", "BULK", "RORO", "TANKER"]),
             "loa_m": round(random.uniform(180, 300), 1),
