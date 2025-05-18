@@ -141,7 +141,10 @@ def override_plan_body(payload: dict, db: Session = Depends(get_db)):
 @router.patch("/{actual_id}/human-fix")
 def override_plan(actual_id: int, payload: dict, db: Session = Depends(get_db)):
     if not planner.model:
-        raise HTTPException(status_code=500, detail="Model not initialized")
+        latest_actual_id = db.query(Vessel.actual_id).order_by(Vessel.actual_id.desc()).first()
+        if latest_actual_id is None:
+            raise HTTPException(status_code=404, detail="No vessels found")
+        get_plan(db, latest_actual_id[0])
 
     schedule = db.query(PredictionScheduleEntry).filter(PredictionScheduleEntry.actual_id == actual_id).first()
     if not schedule:
