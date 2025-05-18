@@ -4,7 +4,7 @@ import axios, {
   type AxiosResponse,
   AxiosHeaders,
 } from "axios";
-import type { VesselCall } from "@/types/server";
+import type { VesselCall,Plan, PlanItem } from "@/types/server";
 
 const api: AxiosInstance = axios.create({
   baseURL: (import.meta.env.VITE_API_URL as string) ?? "http://localhost:8000",
@@ -18,6 +18,26 @@ api.interceptors.request.use(
   }
 );
 
+
+export const getPlan = async (): Promise<Plan> => {
+  const { data } = await api.get<{
+    schedule: {
+      vessel_id: number;
+      start_time: string;
+      end_time: string;
+      berth_id: number;
+    }[];
+  }>("/plan");
+
+  return {
+    schedule: data.schedule.map((item) => ({
+      vesselId: item.vessel_id,
+      startTime: item.start_time,
+      endTime: item.end_time,
+      berthId: item.berth_id,
+    })),
+  };
+};
 export const getVessels = async (): Promise<VesselCall[]> => {
   const { data } = await api.get<any[]>("/vessels");
 

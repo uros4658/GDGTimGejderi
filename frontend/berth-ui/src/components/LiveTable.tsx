@@ -6,74 +6,51 @@ import {
   Th,
   Td,
   TableContainer,
-  Tag,
-  Spinner,
 } from "@chakra-ui/react";
 import {
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
-  type SortingState,
   type ColumnDef,
+  type SortingState,
 } from "@tanstack/react-table";
-import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import type { VesselCall } from "@/types/server";
-import { predictWillChange } from "@/lib/api";
+import type { PlanItem } from "@/types/server";
 
 interface Props {
-  data: VesselCall[];
+  data: PlanItem[];
 }
 
 export default function LiveTable({ data }: Props) {
-  console.log("Vessel data1", data);
-  const [sorting, setSorting] = useState<SortingState>([
-    { id: "eta", desc: false },
-  ]);
+  const [sorting, setSorting] = useState<SortingState>([]);
 
-  const columns: ColumnDef<VesselCall>[] = [
-
+  const columns: ColumnDef<PlanItem>[] = [
     {
-      accessorFn: (row) => row.vessel?.loa_m,
-      id: "loa",
-      header: "Loa (m)",
-      cell: (info) => {
-        const v = info.getValue<number>();
-        return v != null ? v.toFixed(2) : "–";
-      },
-    },
-    {
-      accessorFn: (row) => row.vessel?.beam_m,
-      id: "beam",
-      header: "Beam (m)",
-      cell: (info) => {
-        const v = info.getValue<number>();
-        return v != null ? v.toFixed(2) : "–";
-      },
-    },
-    {
-      accessorFn: (row) => row.vessel?.draft_m,
-      id: "draft",
-      header: "Draft (m)",
-      cell: (info) => {
-        const v = info.getValue<number>();
-        return v != null ? v.toFixed(2) : "–";
-      },
-    },
-    {
-      accessorFn: (row) => row.vessel?.eta ?? "",
-      id: "eta",
-      header: "ETA",
+      accessorFn: (row) => row.startTime,
+      id: "startTime",
+      header: "Start Time",
       cell: (info) => {
         const v = info.getValue<string>();
-        return v ? v.slice(0, 16).replace("T", " ") : "–";
+        return v ? v.replace("T", " ").slice(0, 16) : "–";
       },
     },
- 
+    {
+      accessorFn: (row) => row.endTime,
+      id: "endTime",
+      header: "End Time",
+      cell: (info) => {
+        const v = info.getValue<string>();
+        return v ? v.replace("T", " ").slice(0, 16) : "–";
+      },
+    },
+    {
+      accessorKey: "berthId",
+      header: "Berth ID",
+    },
   ];
 
-  const defaultColumn: Partial<ColumnDef<VesselCall>> = {
+  const defaultColumn: Partial<ColumnDef<PlanItem>> = {
     cell: (info) => {
       const v = info.getValue<any>();
       return v == null ? "–" : String(v);
@@ -90,7 +67,6 @@ export default function LiveTable({ data }: Props) {
     getSortedRowModel: getSortedRowModel(),
   });
 
-  console.log("table rows:", table.getRowModel().rows);
   return (
     <TableContainer maxH="70vh" overflowY="auto">
       <Table size="sm">
