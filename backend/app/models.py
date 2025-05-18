@@ -35,7 +35,7 @@ class Berth(Base):
     max_draft = Column(Float)
     max_dwt = Column(Float)
     allowed_types = Column(String)
-    maintenance_id = Column(Integer, ForeignKey("maintenance_logs.id"), nullable=True)
+    last_maintenance = Column(DateTime)
 
 class PredictionScheduleEntry(Base):
     __tablename__ = "vessel_schedule_entries"

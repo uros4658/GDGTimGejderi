@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+import copy
 from sqlalchemy.orm import Session
 from app.db import SessionLocal
 from app.models import Vessel, Weather, Berth, PredictionScheduleEntry, HumanFix
@@ -88,13 +89,10 @@ def get_plan_by_id(actual_id: int, db: Session = Depends(get_db)):
 def override_plan_body(payload: dict, db: Session = Depends(get_db)):
     actual_id = db.query(Vessel.actual_id).order_by(Vessel.actual_id.desc()).first()
     if not planner.model:
-        raise HTTPException(status_code=500, detail="Model not initialized")
-
-    schedule = db.query(PredictionScheduleEntry).filter(PredictionScheduleEntry.actual_id == actual_id).first()
-    if not schedule:
-        raise HTTPException(status_code=404, detail="Schedule not found")
-    if "changes" not in payload:
-        raise HTTPException(status_code=400, detail="No changes provided")
+        latest_actual_id = db.query(Vessel.actual_id).order_by(Vessel.actual_id.desc()).first()
+        if latest_actual_id is None:
+            raise HTTPException(status_code=404, detail="No vessels found")
+        get_plan(db, latest_actual_id[0])
 
     changes = []
 
@@ -113,22 +111,68 @@ def override_plan_body(payload: dict, db: Session = Depends(get_db)):
             raise HTTPException(status_code=404, detail=f"Planning entry {planning_change['id']} not found")
 
         old = entry
-        new = entry.copy()
+        new = copy.deepcopy(entry)
         for key, value in planning_change.items():
             setattr(new, key, value)
 
+        oldvessel = db.query(Vessel).filter(Vessel.id == old.vessel_id).first()
+        oldberth = db.query(Berth).filter(Berth.id == old.berth_id).first()
+        newvessel = db.query(Vessel).filter(Vessel.id == new.vessel_id).first()
+        newberth = db.query(Berth).filter(Berth.id == new.berth_id).first()
         changes.append({
             "old": VesselScheduleEntry(
-                vessel=old.vessel,
+                vessel=planner.Vessel(
+                    id=oldvessel.id,
+                    actual_id=oldvessel.actual_id,
+                    name=oldvessel.name,
+                    type=oldvessel.type,
+                    loa_m=oldvessel.loa_m,
+                    beam_m=oldvessel.beam_m,
+                    draft_m=oldvessel.draft_m,
+                    eta=oldvessel.eta,
+                    est_berth_time=oldvessel.ebt,
+                    dwt=oldvessel.dwt_t,
+                ),
                 start_time=old.start_time,
                 end_time=old.end_time,
-                berth=old.berth
+                berth=planner.Berth(
+                    id=oldberth.id,
+                    name=oldberth.name,
+                    depth_m=oldberth.depth_m,
+                    max_loa=oldberth.max_loa,
+                    max_beam=oldberth.max_beam,
+                    max_draft=oldberth.max_draft,
+                    max_dwt=oldberth.max_dwt,
+                    allowed_types=oldberth.allowed_types,
+                    last_maintenance=oldberth.last_maintenance
+                )
             ),
             "new": VesselScheduleEntry(
-                vessel=new.vessel,
+                vessel=planner.Vessel(
+                    id=newvessel.id,
+                    actual_id=newvessel.actual_id,
+                    name=newvessel.name,
+                    type=newvessel.type,
+                    loa_m=newvessel.loa_m,
+                    beam_m=newvessel.beam_m,
+                    draft_m=newvessel.draft_m,
+                    eta=newvessel.eta,
+                    est_berth_time=newvessel.ebt,
+                    dwt=newvessel.dwt_t,
+                ),
                 start_time=new.start_time,
                 end_time=new.end_time,
-                berth=new.berth
+                berth=planner.Berth(
+                    id=newberth.id,
+                    name=newberth.name,
+                    depth_m=newberth.depth_m,
+                    max_loa=newberth.max_loa,
+                    max_beam=newberth.max_beam,
+                    max_draft=newberth.max_draft,
+                    max_dwt=newberth.max_dwt,
+                    allowed_types=newberth.allowed_types,
+                    last_maintenance=newberth.last_maintenance
+                )
             )
         })
 
@@ -167,7 +211,7 @@ def override_plan(actual_id: int, payload: dict, db: Session = Depends(get_db)):
             raise HTTPException(status_code=404, detail=f"Planning entry {planning_change['id']} not found")
 
         old = entry
-        new = entry.copy()
+        new = copy.deepcopy(entry)
         for key, value in planning_change.items():
             setattr(new, key, value)
 
