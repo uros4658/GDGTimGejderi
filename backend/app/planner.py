@@ -168,12 +168,12 @@ class Model:
                 'max_beam': [berth.max_beam for berth in self.berths],
                 'max_draft': [berth.max_draft for berth in self.berths],
                 'max_dwt': [berth.max_dwt for berth in self.berths],
-                'est_berth_time': [vessel.est_berth_time.total_seconds() / 3600 for vessel in self.vessels]
+                'est_berth_time': [1000] * len(self.berths),  # Placeholder for actual est_berth_time
             })
             (mse, self.model) = train_model(berth_data)
             db = SessionLocal()
             try:
-                log_entry = PredictionLog(error=mse, actual_id=actual_id)
+                log_entry = PredictionLog(error=mse, actual_id=actual_id[0])
                 db.add(log_entry)
                 db.commit()
                 db.refresh(log_entry)

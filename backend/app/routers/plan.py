@@ -180,6 +180,8 @@ def override_plan_body(payload: dict, db: Session = Depends(get_db)):
         oldberth = db.query(Berth).filter(Berth.id == old.berth_id).first()
         newvessel = db.query(Vessel).filter(Vessel.id == new.vessel_id).first()
         newberth = db.query(Berth).filter(Berth.id == new.berth_id).first()
+        if not oldvessel or not oldberth or not newvessel or not newberth:
+            raise HTTPException(status_code=404, detail="Vessel or Berth not found")
         changes.append({
             "old": VesselScheduleEntry(
                 vessel=planner.Vessel(

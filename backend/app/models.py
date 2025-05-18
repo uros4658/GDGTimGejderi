@@ -45,7 +45,6 @@ class PredictionScheduleEntry(Base):
     vessel_id = Column(Integer, ForeignKey("vessels.id"))
     start_time = Column(DateTime)
     end_time = Column(DateTime)
-    schedule_id = Column(Integer)
     actual_start_time = Column(DateTime)
     actual_end_time = Column(DateTime)
     actual_arrival_time = Column(DateTime)
