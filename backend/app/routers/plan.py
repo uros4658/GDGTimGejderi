@@ -171,6 +171,13 @@ def override_plan(actual_id: int, payload: dict, db: Session = Depends(get_db)):
         for key, value in planning_change.items():
             setattr(new, key, value)
 
+        try:
+            db.add(new)
+            db.commit()
+            db.refresh(new)
+        finally:
+            db.close()
+
         changes.append({
             "old": VesselScheduleEntry(
                 vessel=old.vessel,

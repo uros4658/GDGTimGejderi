@@ -60,7 +60,7 @@ class HumanFix(Base):
 class PredictionLog(Base):
     __tablename__ = "prediction_logs"
     id = Column(Integer, primary_key=True)
-    fix_batch_id = Column(Integer, nullable=False)
+    actual_id = Column(Integer, ForeignKey("vessels.actual_id"))
     timestamp = Column(DateTime, default=datetime.now())
     error = Column(Float, nullable=False)
     
