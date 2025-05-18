@@ -39,7 +39,7 @@ export default function NewCall() {
               leftIcon={<FiUpload />}
               variant="outline"
               onClick={() => {
-                setCurrentApiUrl("/vessels/1000/human-plan");
+                setCurrentApiUrl("/plan/human-fix");
                 bulk.onOpen();
               }}
             >
@@ -94,7 +94,7 @@ export default function NewCall() {
               isDisabled={!humanPlanActualId}
               onClick={() => {
                 if (humanPlanActualId) {
-                  setCurrentApiUrl(`/vessels/${humanPlanActualId}/human-plan`);
+                  setCurrentApiUrl(`/plan/${humanPlanActualId}/human-fix`);
                   bulk.onOpen();
                 }
               }}
