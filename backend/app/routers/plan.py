@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.db import SessionLocal
-from app.models import Vessel, Weather, Berth, PredictionScheduleEntry
+from app.models import Vessel, Weather, Berth, PredictionScheduleEntry, HumanFix
 import app.planner as planner
-from app.planner import schedule_vessels
+from app.planner import VesselScheduleEntry
+import datetime
 
 router = APIRouter(prefix="/plan", tags=["plan"])
 
@@ -14,14 +15,10 @@ def get_db():
     finally:
         db.close()
 
-@router.get("")
-def plan(db: Session = Depends(get_db)):
-    latest_actual_id = db.query(Vessel.actual_id).order_by(Vessel.actual_id.desc()).first()
-    if latest_actual_id is None:
-        raise HTTPException(status_code=404, detail="No vessels found")
-
+def get_plan(db: Session, actual_id: int):
     vessels = []
-    for v in db.query(Vessel).filter(Vessel.actual_id == latest_actual_id[0]).all():
+    for v in db.query(Vessel).filter(Vessel.actual_id == actual_id).all():
+        est_berth_time = datetime.timedelta(minutes=v.ebt)
         vessels.append(planner.Vessel(
             id=v.id,
             actual_id=v.actual_id,
@@ -31,7 +28,7 @@ def plan(db: Session = Depends(get_db)):
             beam_m=v.beam_m,
             draft_m=v.draft_m,
             eta=v.eta,
-            est_berth_time=v.ebt,
+            est_berth_time=est_berth_time,
             dwt=v.dwt_t,
         ))
     weather = []
@@ -59,7 +56,9 @@ def plan(db: Session = Depends(get_db)):
             last_maintenance = last_maintenance_time.timestamp if last_maintenance_time else None,
         ))
 
-    schedule = planner.schedule_vessels(berths, vessels, weather[0])
+
+    planner.model = planner.Model(berths, vessels, weather[0])
+    schedule = planner.model.schedule()
     
     schedule_entries = []
     for entry in schedule.get_schedule():
@@ -71,3 +70,65 @@ def plan(db: Session = Depends(get_db)):
         ))
 
     return {"schedule": schedule_entries}
+
+@router.get("")
+def plan(db: Session = Depends(get_db)):
+    latest_actual_id = db.query(Vessel.actual_id).order_by(Vessel.actual_id.desc()).first()
+    if latest_actual_id is None:
+        raise HTTPException(status_code=404, detail="No vessels found")
+    return get_plan(db, latest_actual_id[0])
+
+@router.get("/{actual_id}")
+def get_plan_by_id(actual_id: int, db: Session = Depends(get_db)):
+    return get_plan(db, actual_id)
+
+@router.patch("/{actual_id}/human-fix")
+def override_plan(actual_id: int, payload: dict, db: Session = Depends(get_db)):
+    if not planner.model:
+        raise HTTPException(status_code=500, detail="Model not initialized")
+
+    schedule = db.query(PredictionScheduleEntry).filter(PredictionScheduleEntry.actual_id == actual_id).first()
+    if not schedule:
+        raise HTTPException(status_code=404, detail="Schedule not found")
+    if "changes" not in payload:
+        raise HTTPException(status_code=400, detail="No changes provided")
+
+    changes = []
+
+    # add human fix to db
+    human_fix = HumanFix(
+        fix_batch_id=actual_id,
+        vessel_id=payload["vessel_id"],
+        berth_id=payload["berth_id"],
+        start_time=payload["start_time"],
+        end_time=payload["end_time"]
+    )
+
+    for planning_change in payload["changes"]:
+        entry = db.query(PredictionScheduleEntry).filter(PredictionScheduleEntry.id == planning_change["id"]).first()
+        if not entry:
+            raise HTTPException(status_code=404, detail=f"Planning entry {planning_change['id']} not found")
+
+        old = entry
+        new = entry.copy()
+        for key, value in planning_change.items():
+            setattr(new, key, value)
+
+        changes.append({
+            "old": VesselScheduleEntry(
+                vessel=old.vessel,
+                start_time=old.start_time,
+                end_time=old.end_time,
+                berth=old.berth
+            ),
+            "new": VesselScheduleEntry(
+                vessel=new.vessel,
+                start_time=new.start_time,
+                end_time=new.end_time,
+                berth=new.berth
+            )
+        })
+
+    planner.model.human_schedule_fix(actual_id, changes)
+
+    return {}
