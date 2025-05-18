@@ -149,14 +149,14 @@ def override_plan(actual_id: int, payload: dict, db: Session = Depends(get_db)):
 
     changes = []
 
-    # add human fix to db
-    human_fix = HumanFix(
-        fix_batch_id=actual_id,
-        vessel_id=payload["vessel_id"],
-        berth_id=payload["berth_id"],
-        start_time=payload["start_time"],
-        end_time=payload["end_time"]
-    )
+    # # add human fix to db
+    # human_fix = HumanFix(
+    #     fix_batch_id=actual_id,
+    #     vessel_id=payload["vessel_id"],
+    #     berth_id=payload["berth_id"],
+    #     start_time=payload["start_time"],
+    #     end_time=payload["end_time"]
+    # )
 
     for planning_change in payload["changes"]:
         entry = db.query(PredictionScheduleEntry).filter(PredictionScheduleEntry.id == planning_change["id"]).first()
