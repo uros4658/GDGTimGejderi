@@ -44,7 +44,7 @@ def get_plan(db: Session, actual_id: int):
         ))
     berths = []
     for b in db.query(Berth).all():
-        last_maintenance_time = db.query(Weather).filter(Weather.id == b.maintenance_id).first()
+        last_maintenance_time = b.last_maintenance
         berths.append(planner.Berth(
             id = b.id,
             name = b.name,
@@ -84,6 +84,49 @@ def plan(db: Session = Depends(get_db)):
 @router.get("/{actual_id}")
 def get_plan_by_id(actual_id: int, db: Session = Depends(get_db)):
     return get_plan(db, actual_id)
+
+@router.post("")
+def create_plan(payload: dict, db: Session = Depends(get_db)):
+    latest_actual_id = db.query(Vessel.actual_id).order_by(Vessel.actual_id.desc()).first()
+    if latest_actual_id is None:
+        raise HTTPException(status_code=404, detail="No vessels found")
+    next_actual_id = latest_actual_id[0] + 1
+
+    schedule = planner.Schedule()
+    for entry in payload["schedule"]:
+        vessel = db.query(Vessel).filter(Vessel.id == entry["vessel_id"]).first()
+        berth = db.query(Berth).filter(Berth.id == entry["berth_id"]).first()
+        if not vessel or not berth:
+            raise HTTPException(status_code=404, detail="Vessel or Berth not found")
+
+        schedule.add_entry(planner.VesselScheduleEntry(
+            vessel=planner.Vessel(
+                id=vessel.id,
+                actual_id=vessel.actual_id,
+                name=vessel.name,
+                type=vessel.type,
+                loa_m=vessel.loa_m,
+                beam_m=vessel.beam_m,
+                draft_m=vessel.draft_m,
+                eta=vessel.eta,
+                est_berth_time=vessel.ebt,
+                dwt=vessel.dwt_t,
+            ),
+            start_time=entry["start_time"],
+            end_time=entry["end_time"],
+            berth=planner.Berth(
+                id=berth.id,
+                name=berth.name,
+                depth_m=berth.depth_m,
+                max_loa=berth.max_loa,
+                max_beam=berth.max_beam,
+                max_draft=berth.max_draft,
+                max_dwt=berth.max_dwt,
+                allowed_types=berth.allowed_types,
+                last_maintenance=berth.last_maintenance
+            )
+        ))
+
 
 @router.patch("/human-fix")
 def override_plan_body(payload: dict, db: Session = Depends(get_db)):
