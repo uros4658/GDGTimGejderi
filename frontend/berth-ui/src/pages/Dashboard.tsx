@@ -48,7 +48,7 @@ export default function Dashboard() {
       if (end && eta > end) return false;
       return true;
     });
-  }, [schedule, startDate, endDate]);
+  }, [schedule, start, end]);
 
   const animationRows = useMemo(() => {
     return filteredSchedule.map((item) => ({
@@ -60,6 +60,28 @@ export default function Dashboard() {
       optimizer_end: item.endTime,
     }));
   }, [filteredSchedule]);
+
+  const avgDurationMs = useMemo(() => {
+    const durations = filteredSchedule
+      .filter((item) => item.actualStartTime && item.actualEndTime)
+      .map(
+        (item) =>
+          new Date(item.actualEndTime).getTime() -
+          new Date(item.actualStartTime).getTime()
+      );
+
+    if (durations.length === 0) return null;
+
+    const total = durations.reduce((sum, d) => sum + d, 0);
+    return total / durations.length;
+  }, [filteredSchedule]);
+
+  const formatDuration = (ms: number) => {
+    const totalMinutes = Math.floor(ms / 60000);
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    return `${hours}h ${minutes}m`;
+  };
 
   if (isLoading) {
     return (
@@ -108,6 +130,13 @@ export default function Dashboard() {
           Play animation
         </Button>
       </Flex>
+
+      {avgDurationMs !== null && (
+        <Alert status="info" mb={4}>
+          Average time spent in the port:{" "}
+          <strong>{formatDuration(avgDurationMs)}</strong>
+        </Alert>
+      )}
 
       <LiveTable data={filteredSchedule} />
 
