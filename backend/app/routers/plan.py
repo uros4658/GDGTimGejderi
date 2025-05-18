@@ -66,7 +66,9 @@ def get_plan(db: Session, actual_id: int):
             vessel_id=entry.vessel.id,
             start_time=entry.start_time,
             end_time=entry.end_time,
-            berth_id=entry.berth.id
+            berth_id=entry.berth.id,
+            actual_start_time=entry.start_time,
+            actual_end_time=entry.end_time,
         ))
 
     return {"schedule": schedule_entries}
@@ -85,8 +87,6 @@ def get_plan_by_id(actual_id: int, db: Session = Depends(get_db)):
 @router.patch("/human-fix")
 def override_plan_body(payload: dict, db: Session = Depends(get_db)):
     actual_id = db.query(Vessel.actual_id).order_by(Vessel.actual_id.desc()).first()
-    if not actual_id:
-        raise HTTPException(status_code=400, detail="actual_id is required in payload")
     if not planner.model:
         raise HTTPException(status_code=500, detail="Model not initialized")
 
@@ -98,14 +98,14 @@ def override_plan_body(payload: dict, db: Session = Depends(get_db)):
 
     changes = []
 
-    # add human fix to db
-    human_fix = HumanFix(
-        fix_batch_id=actual_id,
-        vessel_id=payload["vessel_id"],
-        berth_id=payload["berth_id"],
-        start_time=payload["start_time"],
-        end_time=payload["end_time"]
-    )
+    # # add human fix to db
+    # human_fix = HumanFix(
+    #     fix_batch_id=actual_id,
+    #     vessel_id=payload["vessel_id"],
+    #     berth_id=payload["berth_id"],
+    #     start_time=payload["start_time"],
+    #     end_time=payload["end_time"]
+    # )
 
     for planning_change in payload["changes"]:
         entry = db.query(PredictionScheduleEntry).filter(PredictionScheduleEntry.id == planning_change["id"]).first()
@@ -149,14 +149,14 @@ def override_plan(actual_id: int, payload: dict, db: Session = Depends(get_db)):
 
     changes = []
 
-    # add human fix to db
-    human_fix = HumanFix(
-        fix_batch_id=actual_id,
-        vessel_id=payload["vessel_id"],
-        berth_id=payload["berth_id"],
-        start_time=payload["start_time"],
-        end_time=payload["end_time"]
-    )
+    # # add human fix to db
+    # human_fix = HumanFix(
+    #     fix_batch_id=actual_id,
+    #     vessel_id=payload["vessel_id"],
+    #     berth_id=payload["berth_id"],
+    #     start_time=payload["start_time"],
+    #     end_time=payload["end_time"]
+    # )
 
     for planning_change in payload["changes"]:
         entry = db.query(PredictionScheduleEntry).filter(PredictionScheduleEntry.id == planning_change["id"]).first()
