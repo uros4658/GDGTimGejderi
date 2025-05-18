@@ -41,7 +41,6 @@ export default function Dashboard() {
   const start = startDate ? new Date(startDate) : null;
   const end = endDate ? new Date(endDate) : null;
 
-  // Filter schedule based on time range
   const filteredSchedule = useMemo(() => {
     return schedule.filter((item) => {
       const eta = new Date(item.endTime);
@@ -51,11 +50,10 @@ export default function Dashboard() {
     });
   }, [schedule, startDate, endDate]);
 
-  // Map filtered data for animation
   const animationRows = useMemo(() => {
     return filteredSchedule.map((item) => ({
       id: item.vesselId,
-      vessel_name: `Vessel ${item.vesselId}`, // Replace with real name if available
+      vessel_name: `Vessel ${item.vesselId}`,
       optimizer_berth_id: String(item.berthId),
       arrival: item.startTime,
       optimizer_start: item.startTime,

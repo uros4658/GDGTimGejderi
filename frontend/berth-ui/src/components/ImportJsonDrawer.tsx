@@ -37,7 +37,7 @@ export default function ImportJsonDrawer({ isOpen, onClose, api_url }: Props) {
         payloadArr.map((p) => api.patch(api_url, p).then((r) => r.data))
       ),
     onSuccess: () => {
-      qc.invalidateQueries(); // Invalidate everything since we don’t know the schema
+      qc.invalidateQueries();
       toast({
         status: "success",
         title: "Imported successfully",
