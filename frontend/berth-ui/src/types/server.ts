@@ -39,9 +39,13 @@ export interface BerthPlan {
   end: string;
 }
 
-// export interface Vessel {
-//   id: number;
-//   name: string;
-//   type: string;
-//   eta: string;
-// }
+export interface PlanItem {
+  vesselId: number;
+  startTime: string;
+  endTime: string;
+  berthId: number;
+}
+
+export interface Plan {
+  schedule: PlanItem[];
+}

@@ -14,35 +14,23 @@ import { useQuery } from "@tanstack/react-query";
 import { useState, useMemo } from "react";
 import LiveTable from "@/components/LiveTable";
 import AnimationDrawer from "@/components/AnimationDrawer";
-import { getVessels } from "@/lib/api";
-import { useVesselFeed } from "@/hooks/useVesselFeed";
-import type { VesselCall } from "@/types/server";
+import { getPlan } from "@/lib/api";
+import type { PlanItem } from "@/types/server";
 
 export default function Dashboard() {
-  
-
-  const {
-    data = [],
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["vessels"],
-    queryFn: getVessels,
-  });
-  console.log("Vessel data", data);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  const filteredData = useMemo(() => {
-    if (!startDate && !endDate) return data;
+  const {
+    data,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["plan"],
+    queryFn: getPlan,
+  });
 
-    return data.filter((vc: VesselCall) => {
-      const eta = new Date(vc.vessel?.eta ?? "").getTime();
-      const from = startDate ? new Date(startDate).getTime() : -Infinity;
-      const to = endDate ? new Date(endDate).getTime() : Infinity;
-      return eta >= from && eta <= to;
-    });
-  }, [data, startDate, endDate]);
+  const schedule: PlanItem[] = data?.schedule ?? [];
 
   if (isLoading) {
     return (
@@ -90,7 +78,7 @@ export default function Dashboard() {
         <AnimationDrawer />
       </Flex>
 
-      <LiveTable data={filteredData} />
+      <LiveTable data={schedule} />
     </>
   );
 }
