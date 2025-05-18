@@ -3,9 +3,18 @@ from datetime import datetime, timedelta
 from app.db import SessionLocal
 from app.models import Weather, Berth, MaintenanceLog, Vessel, PredictionScheduleEntry
 
-def seed_weather(session, n=96):
+VESSEL_TYPES = ["CONTAINER", "BULK", "RORO", "TANKER"]
+BERTH_NAMES = ["A2", "B3", "C4", "D5"]
+BERTH_SPECS = [
+    {"max_loa": 350, "max_beam": 50, "max_draft": 15, "max_dwt": 120000, "allowed_types": "CONTAINER,BULK"},
+    {"max_loa": 250, "max_beam": 38, "max_draft": 13, "max_dwt": 80000, "allowed_types": "BULK,RORO"},
+    {"max_loa": 220, "max_beam": 35, "max_draft": 11, "max_dwt": 60000, "allowed_types": "RORO,TANKER"},
+    {"max_loa": 400, "max_beam": 60, "max_draft": 16, "max_dwt": 150000, "allowed_types": "CONTAINER,TANKER"},
+]
+    
+def seed_weather(session, n=120):
     print("⛅ Seeding weather...")
-    base_time = datetime.utcnow().replace(minute=0, second=0, microsecond=0) - timedelta(hours=12)
+    base_time = datetime.utcnow().replace(minute=0, second=0, microsecond=0) - timedelta(hours=24)
     conditions = ["CLEAR", "RAIN", "STORM"]
     weights = [0.7, 0.2, 0.1]
     for i in range(n):
@@ -14,24 +23,17 @@ def seed_weather(session, n=96):
         session.add(Weather(
             timestamp=ts,
             condition=cond,
-            temperature_c=random.uniform(24, 35),
-            wind_speed_knots=random.uniform(2, 18),
-            tide_height_m=random.uniform(0.8, 1.8)
+            temperature_c=round(random.uniform(18, 36), 1),
+            wind_speed_knots=round(random.uniform(1, 22), 1),
+            tide_height_m=round(random.uniform(0.5, 2.2), 2)
         ))
 
 def seed_berths(session):
     print("🛳️ Seeding berths...")
-    names = ["A1", "B2", "C3", "D4"]
-    specs = [
-        {"max_loa": 350, "max_beam": 50, "max_draft": 15, "max_dwt": 120000, "allowed_types": "CONTAINER,BULK"},
-        {"max_loa": 250, "max_beam": 38, "max_draft": 13, "max_dwt": 80000, "allowed_types": "BULK,RORO"},
-        {"max_loa": 220, "max_beam": 35, "max_draft": 11, "max_dwt": 60000, "allowed_types": "RORO,TANKER"},
-        {"max_loa": 400, "max_beam": 60, "max_draft": 16, "max_dwt": 150000, "allowed_types": "CONTAINER,TANKER"},
-    ]
-    for name, spec in zip(names, specs):
+    for name, spec in zip(BERTH_NAMES, BERTH_SPECS):
         session.add(Berth(
             name=name,
-            depth_m=spec["max_draft"],
+            depth_m=spec["max_draft"] + round(random.uniform(0, 2), 1),
             max_loa=spec["max_loa"],
             max_beam=spec["max_beam"],
             max_draft=spec["max_draft"],
@@ -45,12 +47,12 @@ def seed_maintenance_logs(session):
     now = datetime.utcnow()
     logs = []
     for berth in session.query(Berth).all():
-        for _ in range(random.randint(1, 3)):
-            performed_at = now - timedelta(days=random.randint(5, 60))
+        for _ in range(random.randint(2, 4)):
+            performed_at = now - timedelta(days=random.randint(3, 90))
             log = MaintenanceLog(
                 berth_name=berth.name,
                 performed_at=performed_at,
-                notes=random.choice(["Routine", "Crane repair", "Surface cleaning"])
+                notes=random.choice(["Routine", "Crane repair", "Surface cleaning", "Dock inspection"])
             )
             session.add(log)
             logs.append(log)
@@ -62,40 +64,53 @@ def seed_maintenance_logs(session):
             latest_log = max(logs_for_berth, key=lambda l: l.performed_at)
             berth.maintenance_id = latest_log.id
 
-def seed_vessels(session, n=25):
+def seed_vessels(session, n=60):
     print("🚢 Seeding vessels...")
     now = datetime.utcnow()
-    berths = session.query(Berth).all()
+    vessels = []
     for i in range(n):
-        eta = now + timedelta(hours=random.randint(1, 48))
+        vessel_type = random.choice(VESSEL_TYPES)
+        # Pick a berth that allows this vessel type
+        allowed_berths = [b for b, spec in zip(BERTH_NAMES, BERTH_SPECS) if vessel_type in spec["allowed_types"].split(",")]
+        berth_name = random.choice(allowed_berths)
+        berth_spec = BERTH_SPECS[BERTH_NAMES.index(berth_name)]
+        loa = round(random.uniform(berth_spec["max_loa"] * 0.7, berth_spec["max_loa"]), 1)
+        beam = round(random.uniform(berth_spec["max_beam"] * 0.7, berth_spec["max_beam"]), 1)
+        draft = round(random.uniform(berth_spec["max_draft"] * 0.7, berth_spec["max_draft"]), 1)
+        dwt = round(random.uniform(berth_spec["max_dwt"] * 0.5, berth_spec["max_dwt"]), 1)
+        eta = now + timedelta(hours=random.randint(1, 120))
+        ebt = random.randint(60, 360)  # minutes
         vessel = Vessel(
             actual_id=1000,
-            name=f"Vessel-{i}",
-            type=random.choice(["CONTAINER", "BULK", "RORO", "TANKER"]),
-            loa_m=random.uniform(180, 300),
-            beam_m=random.uniform(20, 40),
-            draft_m=random.uniform(8, 14),
-            dwt_t=random.uniform(20000, 120000),
+            name=f"{vessel_type.capitalize()} Vessel {i+1}",
+            type=vessel_type,
+            loa_m=loa,
+            beam_m=beam,
+            draft_m=draft,
+            dwt_t=dwt,
             eta=eta,
-            ebt=random.uniform(1, 10)
+            ebt=ebt
         )
         session.add(vessel)
+        vessels.append((vessel, berth_name))
     session.flush()  # So vessels get IDs
+    return vessels
 
-def seed_schedule_entries(session):
+def seed_schedule_entries(session, vessel_berth_pairs):
     print("📅 Seeding schedule entries...")
-    vessels = session.query(Vessel).all()
-    berths = session.query(Berth).all()
-    for i, vessel in enumerate(vessels):
-        berth = random.choice(berths)
+    for vessel, berth_name in vessel_berth_pairs:
+        berth = session.query(Berth).filter_by(name=berth_name).first()
         start_time = vessel.eta + timedelta(minutes=random.randint(0, 60))
-        end_time = start_time + timedelta(hours=random.randint(4, 12))
+        end_time = start_time + timedelta(minutes=vessel.ebt)
         session.add(PredictionScheduleEntry(
             schedule_id=1,
+            actual_id=vessel.actual_id,
             berth_id=berth.id,
             vessel_id=vessel.id,
             start_time=start_time,
-            end_time=end_time
+            end_time=end_time,
+            actual_start_time=None,
+            actual_end_time=None
         ))
 
 if __name__ == "__main__":
@@ -109,11 +124,11 @@ if __name__ == "__main__":
     seed_maintenance_logs(session)
     session.commit()
 
-    seed_vessels(session)
+    vessel_berth_pairs = seed_vessels(session, n=120)
     session.commit()
 
-    seed_schedule_entries(session)
+    seed_schedule_entries(session, vessel_berth_pairs)
     session.commit()
 
     session.close()
-    print("✅ All tables seeded with realistic data.")
+    print("✅ All tables seeded with realistic and consistent data.")
