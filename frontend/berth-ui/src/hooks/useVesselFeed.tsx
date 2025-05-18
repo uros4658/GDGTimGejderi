@@ -6,7 +6,7 @@ export function useVesselFeed() {
   const qc = useQueryClient();
 
   useEffect(() => {
-    const es = new EventSource("http://localhost:8000/stream/vessels");
+    const es = new EventSource("http://localhost:8000/vessels");
 
     es.onmessage = (e) => {
       const update: VesselCall = JSON.parse(e.data);

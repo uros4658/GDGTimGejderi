@@ -5,6 +5,8 @@ import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
+from app.db import SessionLocal
+from app.models import PredictionLog
 
 
 class Berth:
@@ -114,7 +116,7 @@ def schedule_fcfs(berths: List[Berth], vessels: List[Vessel], weather: Weather) 
     return schedule
 
 # linear regression model for improving berth allocation
-def train_model(data: pd.DataFrame) -> LinearRegression:
+def train_model(data: pd.DataFrame) -> Tuple[float,LinearRegression]:
     X = data[['max_loa', 'max_beam', 'max_draft', 'max_dwt']]
     y = data['est_berth_time']
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -122,43 +124,60 @@ def train_model(data: pd.DataFrame) -> LinearRegression:
     model.fit(X_train, y_train)
     predictions = model.predict(X_test)
     mse = mean_squared_error(y_test, predictions)
-    print(f"Model MSE: {mse}")
-    return model
+    print(f"Model Mean Squared Error: {mse}")
+    return (mse, model)
 
 def predict_berth_time(model: LinearRegression, berth: Berth, vessel: Vessel) -> float:
     features = np.array([[berth.max_loa, berth.max_beam, berth.max_draft, berth.max_dwt]])
     est_berth_time = model.predict(features)
     return est_berth_time[0]
 
-def schedule_with_model(berths: List[Berth], vessels: List[Vessel], weather: Weather, model: LinearRegression) -> Schedule:
-    schedule = Schedule()
-    for vessel in vessels:
-        for berth in berths:
-            if berth.is_suitable_for_vessel(vessel):
-                est_berth_time = predict_berth_time(model, berth, vessel)
-                # check if berth available at time
-                for entry in schedule.get_schedule():
-                    if berth.id == entry.vessel.id and not (entry.end_time < vessel.eta or entry.start_time > vessel.eta + datetime.timedelta(hours=est_berth_time)):
-                        break
-                start_time = max(vessel.eta, datetime.datetime.now())
-                end_time = start_time + datetime.timedelta(hours=est_berth_time)
-                schedule.add_entry(VesselScheduleEntry(vessel, start_time, end_time, berth))
-                break
-    return schedule
+class Model:
+    def __init__(self, berths: List[Berth], vessels: List[Vessel], weather: Weather):
+        self.berths = berths
+        self.vessels = vessels
+        self.weather = weather
+        self.model: Optional[LinearRegression] = None
 
-def human_schedule_fix(fixes: List[Tuple[VesselScheduleEntry, VesselScheduleEntry]]):
-    for fix in fixes:
-        original_entry, new_entry = fix
-        # update model with human fixes
+    def schedule(self) -> Schedule:
+        return schedule_fcfs(self.berths, self.vessels, self.weather)
+        # if self.model is None:
+        #     return schedule_fcfs(self.berths, self.vessels, self.weather)
 
-def schedule_vessels(berths: List[Berth], vessels: List[Vessel], conditions: Weather) -> Schedule:
-    # Train the model on the berth data
-    berth_data = pd.DataFrame({
-        'max_loa': [berth.max_loa for berth in berths],
-        'max_beam': [berth.max_beam for berth in berths],
-        'max_draft': [berth.max_draft for berth in berths],
-        'max_dwt': [berth.max_dwt for berth in berths],
-        'est_berth_time': [vessel.est_berth_time.total_seconds() / 3600 for vessel in vessels]
-    })
-    model = train_model(berth_data)
-    return schedule_with_model(berths, vessels, conditions, model)
+        # model = self.model
+        # schedule = Schedule()
+        # for vessel in self.vessels:
+        #     for berth in self.berths:
+        #         if berth.is_suitable_for_vessel(vessel):
+        #             est_berth_time = predict_berth_time(model, berth, vessel)
+        #             # check if berth available at time
+        #             for entry in schedule.get_schedule():
+        #                 if berth.id == entry.vessel.id and not (entry.end_time < vessel.eta or entry.start_time > vessel.eta + datetime.timedelta(hours=est_berth_time)):
+        #                     break
+        #             start_time = max(vessel.eta, datetime.datetime.now())
+        #             end_time = start_time + datetime.timedelta(hours=est_berth_time)
+        #             schedule.add_entry(VesselScheduleEntry(vessel, start_time, end_time, berth))
+        #             break
+        # return schedule
+
+    def human_schedule_fix(self, actual_id: int, fixes: List[Tuple[VesselScheduleEntry, VesselScheduleEntry]]):
+        for fix in fixes:
+            original_entry, new_entry = fix
+            berth_data = pd.DataFrame({
+                'max_loa': [berth.max_loa for berth in self.berths],
+                'max_beam': [berth.max_beam for berth in self.berths],
+                'max_draft': [berth.max_draft for berth in self.berths],
+                'max_dwt': [berth.max_dwt for berth in self.berths],
+                'est_berth_time': [vessel.est_berth_time.total_seconds() / 3600 for vessel in self.vessels]
+            })
+            (mse, self.model) = train_model(berth_data)
+            db = SessionLocal()
+            try:
+                log_entry = PredictionLog(error=mse, actual_id=actual_id)
+                db.add(log_entry)
+                db.commit()
+                db.refresh(log_entry)
+            finally:
+                db.close()
+
+model: Optional[Model] = None
