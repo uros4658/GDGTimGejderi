@@ -68,6 +68,7 @@ def get_plan(db: Session, actual_id: int):
             start_time=entry.start_time,
             end_time=entry.end_time,
             berth_id=entry.berth.id,
+            actual_arrival_time=entry.start_time - datetime.timedelta(minutes=15),
             actual_start_time=entry.start_time,
             actual_end_time=entry.end_time,
         ))

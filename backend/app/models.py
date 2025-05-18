@@ -48,6 +48,7 @@ class PredictionScheduleEntry(Base):
     schedule_id = Column(Integer)
     actual_start_time = Column(DateTime)
     actual_end_time = Column(DateTime)
+    actual_arrival_time = Column(DateTime)
 
 class HumanFix(Base):
     __tablename__ = "human_fixes"
