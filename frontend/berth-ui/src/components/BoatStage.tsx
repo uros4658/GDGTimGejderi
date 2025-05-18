@@ -15,11 +15,14 @@ export type Row = {
   optimizer_start: string;   // ETB
   optimizer_end: string;     // ETD
 };
-interface Props { calls: Row[]; playMs?: number; }
+interface Props {
+  calls: Row[];
+  playMs?: number;
+}
 
 /* ---------- helpers ---------- */
 const toDate = (s?: string) =>
-  s ? new Date(s.replace(/(\.\d{3})\d+/, '$1')) : new Date(NaN);
+  s ? new Date(s.replace(/(\.\d{3})\d+/, "$1")) : new Date(NaN);
 
 const colourFor: Record<string, string> = {
   CONTAINER: '#1d4ed8',

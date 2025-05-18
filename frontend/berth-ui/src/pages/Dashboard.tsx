@@ -38,8 +38,20 @@ export default function Dashboard() {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const start = startDate ? new Date(startDate) : null;
+  const end = endDate ? new Date(endDate) : null;
+
+  const filteredSchedule = useMemo(() => {
+    return schedule.filter((item) => {
+      const eta = new Date(item.endTime);
+      if (start && eta < start) return false;
+      if (end && eta > end) return false;
+      return true;
+    });
+  }, [schedule, start, end]);
+
   const animationRows = useMemo(() => {
-    return schedule.map((item) => ({
+    return filteredSchedule.map((item) => ({
       id: item.vesselId,
       vessel_name: `Vessel ${item.vesselId}`,
       optimizer_berth_id: String(item.berthId),
@@ -47,7 +59,29 @@ export default function Dashboard() {
       optimizer_start: item.startTime,
       optimizer_end: item.endTime,
     }));
-  }, [schedule]);
+  }, [filteredSchedule]);
+
+  const avgDurationMs = useMemo(() => {
+    const durations = filteredSchedule
+      .filter((item) => item.actualStartTime && item.actualEndTime)
+      .map(
+        (item) =>
+          new Date(item.actualEndTime).getTime() -
+          new Date(item.actualStartTime).getTime()
+      );
+
+    if (durations.length === 0) return null;
+
+    const total = durations.reduce((sum, d) => sum + d, 0);
+    return total / durations.length;
+  }, [filteredSchedule]);
+
+  const formatDuration = (ms: number) => {
+    const totalMinutes = Math.floor(ms / 60000);
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    return `${hours}h ${minutes}m`;
+  };
 
   if (isLoading) {
     return (
@@ -56,6 +90,7 @@ export default function Dashboard() {
       </Center>
     );
   }
+
   if (isError) {
     return (
       <Alert status="error">
@@ -72,7 +107,7 @@ export default function Dashboard() {
         <Spacer />
 
         <FormControl maxW="250px">
-          <FormLabel mb={1}>From ETA</FormLabel>
+          <FormLabel mb={1}>From End Time</FormLabel>
           <Input
             type="datetime-local"
             size="sm"
@@ -82,7 +117,7 @@ export default function Dashboard() {
         </FormControl>
 
         <FormControl maxW="250px">
-          <FormLabel mb={1}>To ETA</FormLabel>
+          <FormLabel mb={1}>To End Time</FormLabel>
           <Input
             type="datetime-local"
             size="sm"
@@ -96,7 +131,14 @@ export default function Dashboard() {
         </Button>
       </Flex>
 
-      <LiveTable data={schedule} />
+      {avgDurationMs !== null && (
+        <Alert status="info" mb={4}>
+          Average time spent in the port:{" "}
+          <strong>{formatDuration(avgDurationMs)}</strong>
+        </Alert>
+      )}
+
+      <LiveTable data={filteredSchedule} />
 
       <Drawer isOpen={isOpen} placement="right" size="xl" onClose={onClose}>
         <DrawerOverlay />

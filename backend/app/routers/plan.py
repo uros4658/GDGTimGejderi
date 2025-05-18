@@ -128,6 +128,23 @@ def create_plan(payload: dict, db: Session = Depends(get_db)):
             )
         ))
 
+    # Save the schedule to the database
+    for entry in schedule.get_schedule():
+        schedule_entry = PredictionScheduleEntry(
+            actual_id=next_actual_id,
+            vessel_id=entry.vessel.id,
+            berth_id=entry.berth.id,
+            start_time=entry.start_time,
+            end_time=entry.end_time,
+            actual_arrival_time=entry.start_time - datetime.timedelta(minutes=15),
+            actual_start_time=entry.start_time,
+            actual_end_time=entry.end_time,
+        )
+        db.add(schedule_entry)
+        db.commit()
+        db.refresh(schedule_entry)
+    return {}
+
 
 @router.patch("/human-fix")
 def override_plan_body(payload: dict, db: Session = Depends(get_db)):
@@ -163,6 +180,8 @@ def override_plan_body(payload: dict, db: Session = Depends(get_db)):
         oldberth = db.query(Berth).filter(Berth.id == old.berth_id).first()
         newvessel = db.query(Vessel).filter(Vessel.id == new.vessel_id).first()
         newberth = db.query(Berth).filter(Berth.id == new.berth_id).first()
+        if not oldvessel or not oldberth or not newvessel or not newberth:
+            raise HTTPException(status_code=404, detail="Vessel or Berth not found")
         changes.append({
             "old": VesselScheduleEntry(
                 vessel=planner.Vessel(

@@ -16,15 +16,9 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { v4 as uuidv4 } from "uuid";
 import { FiCheckCircle, FiXCircle } from "react-icons/fi";
 
 import api from "@/lib/api";
-import { vesselCallArraySchema } from "@/types/zodSchemas";
-import type { NewVesselCall } from "@/types/new-call";
-import type { VesselCall } from "@/types/server";
-
-type PostPayload = NewVesselCall & { id: string };
 
 interface Props {
   isOpen: boolean;
@@ -37,13 +31,13 @@ export default function ImportJsonDrawer({ isOpen, onClose, api_url }: Props) {
   const qc = useQueryClient();
   const [errorMsg, setErrorMsg] = useState("");
 
-  const importMut = useMutation<VesselCall[], Error, PostPayload[]>({
+  const importMut = useMutation<any[], Error, any[]>({
     mutationFn: async (payloadArr) =>
       Promise.all(
-        payloadArr.map((p) => api.post(api_url, p).then((r) => r.data))
+        payloadArr.map((p) => api.patch(api_url, p).then((r) => r.data))
       ),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["vessels"] });
+      qc.invalidateQueries();
       toast({
         status: "success",
         title: "Imported successfully",
@@ -64,11 +58,9 @@ export default function ImportJsonDrawer({ isOpen, onClose, api_url }: Props) {
     try {
       const text = await file.text();
       const parsed = JSON.parse(text);
-      const calls = vesselCallArraySchema.parse(parsed);
-      const payload: PostPayload[] = calls.map((c) => ({
-        id: uuidv4(),
-        ...c,
-      }));
+
+      const payload: any[] = Array.isArray(parsed) ? parsed : [parsed];
+
       importMut.mutate(payload);
       setErrorMsg("");
     } catch (err: any) {
@@ -118,6 +110,7 @@ export default function ImportJsonDrawer({ isOpen, onClose, api_url }: Props) {
             colorScheme="blue"
             isLoading={importMut.isPending}
             loadingText="Uploading"
+            onClick={onClose}
           >
             Done
           </Button>

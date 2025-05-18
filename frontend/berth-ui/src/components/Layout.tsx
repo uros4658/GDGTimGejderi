@@ -13,7 +13,6 @@ import { NavLink, Outlet } from "react-router-dom";
 import { IoBoatOutline } from "react-icons/io5";
 import { FiMap, FiPlusCircle, FiClock, FiActivity } from "react-icons/fi";
 
-// 🔹 simple helper – one nav item
 function NavItem({
   to,
   icon,
