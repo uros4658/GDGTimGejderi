@@ -66,7 +66,9 @@ def get_plan(db: Session, actual_id: int):
             vessel_id=entry.vessel.id,
             start_time=entry.start_time,
             end_time=entry.end_time,
-            berth_id=entry.berth.id
+            berth_id=entry.berth.id,
+            actual_start_time=entry.start_time,
+            actual_end_time=entry.end_time,
         ))
 
     return {"schedule": schedule_entries}
@@ -82,8 +84,11 @@ def plan(db: Session = Depends(get_db)):
 def get_plan_by_id(actual_id: int, db: Session = Depends(get_db)):
     return get_plan(db, actual_id)
 
-@router.patch("/{actual_id}/human-fix")
-def override_plan(actual_id: int, payload: dict, db: Session = Depends(get_db)):
+@router.patch("/human-fix")
+def override_plan_body(payload: dict, db: Session = Depends(get_db)):
+    actual_id = db.query(Vessel.actual_id).order_by(Vessel.actual_id.desc()).first()
+    if not actual_id:
+        raise HTTPException(status_code=400, detail="actual_id is required in payload")
     if not planner.model:
         raise HTTPException(status_code=500, detail="Model not initialized")
 
@@ -103,6 +108,57 @@ def override_plan(actual_id: int, payload: dict, db: Session = Depends(get_db)):
         start_time=payload["start_time"],
         end_time=payload["end_time"]
     )
+
+    for planning_change in payload["changes"]:
+        entry = db.query(PredictionScheduleEntry).filter(PredictionScheduleEntry.id == planning_change["id"]).first()
+        if not entry:
+            raise HTTPException(status_code=404, detail=f"Planning entry {planning_change['id']} not found")
+
+        old = entry
+        new = entry.copy()
+        for key, value in planning_change.items():
+            setattr(new, key, value)
+
+        changes.append({
+            "old": VesselScheduleEntry(
+                vessel=old.vessel,
+                start_time=old.start_time,
+                end_time=old.end_time,
+                berth=old.berth
+            ),
+            "new": VesselScheduleEntry(
+                vessel=new.vessel,
+                start_time=new.start_time,
+                end_time=new.end_time,
+                berth=new.berth
+            )
+        })
+
+    planner.model.human_schedule_fix(actual_id, changes)
+
+    return {}
+
+@router.patch("/{actual_id}/human-fix")
+def override_plan(actual_id: int, payload: dict, db: Session = Depends(get_db)):
+    if not planner.model:
+        raise HTTPException(status_code=500, detail="Model not initialized")
+
+    schedule = db.query(PredictionScheduleEntry).filter(PredictionScheduleEntry.actual_id == actual_id).first()
+    if not schedule:
+        raise HTTPException(status_code=404, detail="Schedule not found")
+    if "changes" not in payload:
+        raise HTTPException(status_code=400, detail="No changes provided")
+
+    changes = []
+
+    # # add human fix to db
+    # human_fix = HumanFix(
+    #     fix_batch_id=actual_id,
+    #     vessel_id=payload["vessel_id"],
+    #     berth_id=payload["berth_id"],
+    #     start_time=payload["start_time"],
+    #     end_time=payload["end_time"]
+    # )
 
     for planning_change in payload["changes"]:
         entry = db.query(PredictionScheduleEntry).filter(PredictionScheduleEntry.id == planning_change["id"]).first()
