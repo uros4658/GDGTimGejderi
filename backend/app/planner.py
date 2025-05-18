@@ -140,7 +140,44 @@ class Model:
         self.model: Optional[LinearRegression] = None
 
     def schedule(self) -> Schedule:
-        return schedule_fcfs(self.berths, self.vessels, self.weather)
+        # get schedule from the db
+        db = SessionLocal()
+        try:
+            latest_actual_id = db.query(PredictionScheduleEntry.actual_id).order_by(PredictionScheduleEntry.actual_id.desc()).first()
+            if latest_actual_id is None:
+                raise Exception("No vessels found")
+            schedule = Schedule()
+            for entry in db.query(PredictionScheduleEntry).filter(PredictionScheduleEntry.actual_id == latest_actual_id[0]).all():
+                vessel = Vessel(
+                    id=entry.vessel_id,
+                    actual_id=entry.actual_id,
+                    name="",
+                    type="",
+                    loa_m=0,
+                    beam_m=0,
+                    draft_m=0,
+                    eta=entry.start_time,
+                    est_berth_time=entry.end_time - entry.start_time,
+                    dwt=0
+                )
+                berth = Berth(
+                    id=entry.berth_id,
+                    name="",
+                    depth_m=0,
+                    max_loa=0,
+                    max_beam=0,
+                    max_draft=0,
+                    max_dwt=0,
+                    allowed_types=[],
+                    last_maintenance=None
+                )
+                schedule.add_entry(VesselScheduleEntry(vessel, entry.start_time, entry.end_time, berth))
+            return schedule
+        finally:
+            db.close()
+
+
+        # return schedule_fcfs(self.berths, self.vessels, self.weather)
         # if self.model is None:
         #     return schedule_fcfs(self.berths, self.vessels, self.weather)
 
