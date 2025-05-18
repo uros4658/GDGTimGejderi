@@ -6,7 +6,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 from app.db import SessionLocal
-from app.models import PredictionLog
+from app.models import PredictionLog, PredictionScheduleEntry
 
 
 class Berth:

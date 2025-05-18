@@ -43,7 +43,7 @@ const BoatSVG = ({ fill }: { fill: string }) => (
 );
 
 /* -------------- component ------------- */
-export default function BoatStageTop({ calls, playMs = 60_000 }: Props) {
+export default function BoatStageTop({ calls, playMs }: Props) {
   const stage      = useRef<HTMLDivElement>(null);
   const tlRef      = useRef<gsap.core.Timeline | null>(null);
   const [w,setW]   = useState(0);
@@ -78,11 +78,22 @@ export default function BoatStageTop({ calls, playMs = 60_000 }: Props) {
   useEffect(()=>{
     if(!rows.length||!w||!h) return;
     tlRef.current?.kill();
-    const tl=gsap.timeline(); tlRef.current=tl;
+    const tl = gsap.timeline(); tlRef.current = tl;
 
-    const t0=toDate(rows[0].arrival).getTime();
-    const span=toDate(rows.at(-1)!.optimizer_end).getTime()-t0;
-    const msPerTl=span/(playMs/1000); tl.data={t0,msPerTl};
+    const t0   = toDate(rows[0].arrival).getTime();
+    const span = toDate(rows.at(-1)!.optimizer_end).getTime() - t0;
+
+    //─── 1) compute average dwell (optimizer_end - optimizer_start)
+    const dwellTimes = rows.map(r =>
+      toDate(r.optimizer_end).getTime() - toDate(r.optimizer_start).getTime()
+    );
+    const avgDwell = dwellTimes.reduce((a,b) => a + b, 0) / dwellTimes.length;
+
+    //─── 2) if no playMs passed in, default to average dwell
+    const durationMs = playMs != null ? playMs : avgDwell;
+    // now map your data‐time span onto seconds of animation
+    const msPerTl = span / (durationMs / 1000);
+    tl.data = { t0, msPerTl };
 
     setClock(new Date(t0));
     setQueue(rows.map(r=>r.id as string));

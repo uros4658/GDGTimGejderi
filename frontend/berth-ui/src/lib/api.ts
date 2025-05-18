@@ -26,6 +26,8 @@ export const getPlan = async (): Promise<Plan> => {
       start_time: string;
       end_time: string;
       berth_id: number;
+      actual_start_time: string;
+      actual_end_time: string;
     }[];
   }>("/plan");
 
@@ -35,6 +37,8 @@ export const getPlan = async (): Promise<Plan> => {
       startTime: item.start_time,
       endTime: item.end_time,
       berthId: item.berth_id,
+      actualStartTime: item.actual_start_time,
+      actualEndTime: item.actual_end_time,
     })),
   };
 };

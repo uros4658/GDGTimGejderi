@@ -35,7 +35,7 @@ class Berth(Base):
     max_draft = Column(Float)
     max_dwt = Column(Float)
     allowed_types = Column(String)
-    maintenance_id = Column(Integer, ForeignKey("maintenance_logs.id"), nullable=True)
+    last_maintenance = Column(DateTime)
 
 class PredictionScheduleEntry(Base):
     __tablename__ = "vessel_schedule_entries"
@@ -61,7 +61,7 @@ class HumanFix(Base):
 class PredictionLog(Base):
     __tablename__ = "prediction_logs"
     id = Column(Integer, primary_key=True)
-    fix_batch_id = Column(Integer, nullable=False)
+    actual_id = Column(Integer, ForeignKey("vessels.actual_id"))
     timestamp = Column(DateTime, default=datetime.now())
     error = Column(Float, nullable=False)
     
