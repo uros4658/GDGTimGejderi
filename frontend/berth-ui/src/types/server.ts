@@ -44,6 +44,7 @@ export interface PlanItem {
   startTime: string;
   endTime: string;
   berthId: number;
+  actualArrivalTime: string;
   actualStartTime: string;
   actualEndTime: string;
 }

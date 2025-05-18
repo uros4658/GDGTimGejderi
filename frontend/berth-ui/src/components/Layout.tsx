@@ -3,10 +3,12 @@ import {
   Flex,
   HStack,
   Icon,
+  Image,
   Text,
   VStack,
   useColorModeValue as mode,
 } from "@chakra-ui/react";
+import logo from "../assets/logo.png";
 import { NavLink, Outlet } from "react-router-dom";
 import { IoBoatOutline } from "react-icons/io5";
 import { FiMap, FiPlusCircle, FiClock, FiActivity } from "react-icons/fi";
@@ -58,7 +60,7 @@ export default function Layout() {
           mb={10}
           textAlign={{ base: "center", lg: "left" }}
         >
-          Berth&nbsp;UI
+          Harbor&nbsp;Pilot
         </Text>
 
         <VStack align="stretch" spacing={2}>
@@ -81,8 +83,18 @@ export default function Layout() {
       </Box>
 
       {/* ░░ main ░░ */}
-      <Box flex="1" p={{ base: 4, lg: 8 }} overflow="auto">
+      <Box flex="1" p={{ base: 4, lg: 8 }} overflow="auto" pos="relative">
         <Outlet />
+
+        {/* fixed logo at bottom-left */}
+        <Box pos="fixed" bottom="4" left="4" zIndex="tooltip">
+          <Image
+            src={logo}
+            alt="Harbor Pilot Logo"
+            boxSize="40px"
+            objectFit="contain"
+          />
+        </Box>
       </Box>
     </Flex>
   );

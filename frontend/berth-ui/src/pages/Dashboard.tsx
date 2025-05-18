@@ -38,13 +38,12 @@ export default function Dashboard() {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  // map your PlanItem[] to BoatStage.Row[]
   const animationRows = useMemo(() => {
     return schedule.map((item) => ({
       id: item.vesselId,
-      vessel_name: `Vessel ${item.vesselId}`,    // or pull real name if you have it
+      vessel_name: `Vessel ${item.vesselId}`,
       optimizer_berth_id: String(item.berthId),
-      arrival: item.startTime,
+      arrival: item.actualArrivalTime,
       optimizer_start: item.startTime,
       optimizer_end: item.endTime,
     }));
@@ -105,7 +104,7 @@ export default function Dashboard() {
           <DrawerCloseButton />
           <DrawerHeader>Plan animation</DrawerHeader>
           <DrawerBody>
-            <BoatStage calls={animationRows} playMs={120_000} />
+            <BoatStage calls={animationRows} playMs={1_000_000} />
           </DrawerBody>
         </DrawerContent>
       </Drawer>
