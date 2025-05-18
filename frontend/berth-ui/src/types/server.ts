@@ -38,3 +38,10 @@ export interface BerthPlan {
   start: string;
   end: string;
 }
+
+// export interface Vessel {
+//   id: number;
+//   name: string;
+//   type: string;
+//   eta: string;
+// }

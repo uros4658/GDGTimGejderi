@@ -13,47 +13,48 @@ import {
   Text,
   VStack,
   useToast,
-} from '@chakra-ui/react';
-import { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { v4 as uuidv4 } from 'uuid';
-import { FiCheckCircle, FiXCircle } from 'react-icons/fi';
+} from "@chakra-ui/react";
+import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { v4 as uuidv4 } from "uuid";
+import { FiCheckCircle, FiXCircle } from "react-icons/fi";
 
-import api from '@/lib/api';
-import { vesselCallArraySchema } from '@/types/zodSchemas';
-import type { NewVesselCall } from '@/types/new-call';
-import type { VesselCall } from '@/types/server';
+import api from "@/lib/api";
+import { vesselCallArraySchema } from "@/types/zodSchemas";
+import type { NewVesselCall } from "@/types/new-call";
+import type { VesselCall } from "@/types/server";
 
 type PostPayload = NewVesselCall & { id: string };
 
 interface Props {
   isOpen: boolean;
   onClose(): void;
+  api_url: string;
 }
 
-export default function ImportJsonDrawer({ isOpen, onClose }: Props) {
+export default function ImportJsonDrawer({ isOpen, onClose, api_url }: Props) {
   const toast = useToast();
   const qc = useQueryClient();
-  const [errorMsg, setErrorMsg] = useState('');
+  const [errorMsg, setErrorMsg] = useState("");
 
   const importMut = useMutation<VesselCall[], Error, PostPayload[]>({
     mutationFn: async (payloadArr) =>
       Promise.all(
-        payloadArr.map((p) => api.post('/vessels', p).then((r) => r.data))
+        payloadArr.map((p) => api.post(api_url, p).then((r) => r.data))
       ),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['vessels'] });
+      qc.invalidateQueries({ queryKey: ["vessels"] });
       toast({
-        status: 'success',
-        title: 'Imported successfully',
+        status: "success",
+        title: "Imported successfully",
         icon: <FiCheckCircle />,
       });
       onClose();
     },
     onError: () =>
       toast({
-        status: 'error',
-        title: 'Import failed',
+        status: "error",
+        title: "Import failed",
         icon: <FiXCircle />,
       }),
   });
@@ -69,9 +70,9 @@ export default function ImportJsonDrawer({ isOpen, onClose }: Props) {
         ...c,
       }));
       importMut.mutate(payload);
-      setErrorMsg('');
+      setErrorMsg("");
     } catch (err: any) {
-      setErrorMsg(err.message ?? 'Invalid JSON');
+      setErrorMsg(err.message ?? "Invalid JSON");
     }
   };
 
@@ -87,9 +88,7 @@ export default function ImportJsonDrawer({ isOpen, onClose }: Props) {
       <DrawerContent>
         <DrawerCloseButton />
 
-        <DrawerHeader borderBottomWidth="1px">
-          Import vessel calls
-        </DrawerHeader>
+        <DrawerHeader borderBottomWidth="1px">Import JSON</DrawerHeader>
 
         <DrawerBody>
           <VStack spacing={6} align="stretch">

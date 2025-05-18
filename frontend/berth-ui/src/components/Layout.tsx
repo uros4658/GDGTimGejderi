@@ -6,14 +6,10 @@ import {
   Text,
   VStack,
   useColorModeValue as mode,
-} from '@chakra-ui/react';
-import { NavLink, Outlet } from 'react-router-dom';
-import {
-  FiMap,
-  FiPlusCircle,
-  FiClock,
-  FiActivity,
-} from 'react-icons/fi';
+} from "@chakra-ui/react";
+import { NavLink, Outlet } from "react-router-dom";
+import { IoBoatOutline } from "react-icons/io5";
+import { FiMap, FiPlusCircle, FiClock, FiActivity } from "react-icons/fi";
 
 // 🔹 simple helper – one nav item
 function NavItem({
@@ -32,20 +28,20 @@ function NavItem({
       px={4}
       py={3}
       rounded="md"
-      _hover={{ bg: 'whiteAlpha.200' }}
-      _activeLink={{ bg: 'whiteAlpha.300', fontWeight: 'bold' }}
+      _hover={{ bg: "whiteAlpha.200" }}
+      _activeLink={{ bg: "whiteAlpha.300", fontWeight: "bold" }}
       w="full"
       spacing={3}
     >
       <Icon as={icon} boxSize={5} />
-      <Text display={{ base: 'none', lg: 'inline' }}>{children}</Text>
+      <Text display={{ base: "none", lg: "inline" }}>{children}</Text>
     </HStack>
   );
 }
 
 export default function Layout() {
   return (
-    <Flex minH="100vh" bg={mode('gray.50', 'gray.800')}>
+    <Flex minH="100vh" bg={mode("gray.50", "gray.800")}>
       {/* ░░ sidebar ░░ */}
       <Box
         as="aside"
@@ -57,10 +53,10 @@ export default function Layout() {
         boxShadow="xl"
       >
         <Text
-          fontSize={{ base: 'xl', lg: '2xl' }}
+          fontSize={{ base: "xl", lg: "2xl" }}
           fontWeight="bold"
           mb={10}
-          textAlign={{ base: 'center', lg: 'left' }}
+          textAlign={{ base: "center", lg: "left" }}
         >
           Berth&nbsp;UI
         </Text>
@@ -68,6 +64,9 @@ export default function Layout() {
         <VStack align="stretch" spacing={2}>
           <NavItem to="/dashboard" icon={FiMap}>
             Dashboard
+          </NavItem>
+          <NavItem to="/vessels" icon={IoBoatOutline}>
+            Vessels
           </NavItem>
           <NavItem to="/new-call" icon={FiPlusCircle}>
             New Call
